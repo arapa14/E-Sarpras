@@ -16,11 +16,11 @@ class SettingSeeder extends Seeder
         $settings = [
             [
                 'key' => 'name',
-                'value' => 'Go Clean 1'
+                'value' => 'E-Sarpras'
             ],
             [
                 'key' => 'logo',
-                'value' => 'storage/logos/GoClean1.jpg'
+                'value' => 'storage/logos/E-Sarpras.jpg'
             ],
         ];
 
