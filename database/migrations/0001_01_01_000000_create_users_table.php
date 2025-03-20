@@ -18,8 +18,8 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('whatsapp');
             $table->string('password');
-            $table->enum('role', ['student', 'teacher', 'admin'])->default('student');
-            $table->rememberToken();
+            $table->enum('role', ['user', 'admin', 'superAdmin'])->default('user');
+            $table->rememberToken();    
             $table->timestamps();
         });
 

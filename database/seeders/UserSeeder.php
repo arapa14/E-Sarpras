@@ -17,6 +17,13 @@ class UserSeeder extends Seeder
         $users = [
             // Data Dummy
             [
+                'name'     => 'Super Admin',
+                'email'    => 'superadmin@gmail.com',
+                'whatsapp' => '08123456789',
+                'role'     => 'superAdmin',
+                'password' => Hash::make('lorem-ipsum')
+            ],
+            [
                 'name'     => 'Admin',
                 'email'    => 'admin@gmail.com',
                 'whatsapp' => '08123456789',
@@ -27,14 +34,14 @@ class UserSeeder extends Seeder
                 'name'     => 'Teacher',
                 'email'    => 'teacher@gmail.com',
                 'whatsapp' => '08123456789',
-                'role'     => 'teacher',
+                'role'     => 'user',
                 'password' => Hash::make('lorem-ipsum'),
             ],
             [
                 'name'     => 'Student',
                 'email'    => 'student@gmail.com',
                 'whatsapp' => '08123456789',
-                'role'     => 'student',
+                'role'     => 'user',
                 'password' => Hash::make('lorem-ipsum'),
             ],
         ];
