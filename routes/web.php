@@ -1,7 +1,9 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ComplaintController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\serverController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -12,3 +14,11 @@ Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 
 // Dashboard based on role
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
+// API
+Route::get('/server-time', [serverController::class, 'getServerTime']);
+
+// Route User
+Route::middleware(['auth', 'isUser'])->group(function () {
+    Route::post('/complaint', [ComplaintController::class, 'store'])->name('complaint.store');
+});

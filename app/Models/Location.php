@@ -8,5 +8,5 @@ class Location extends Model
 {
     protected $table = 'locations';
 
-    protected $fillable = 'location';
+    protected $fillable = ['location'];
 }

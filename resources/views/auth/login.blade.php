@@ -125,7 +125,7 @@
                             @enderror
                         </div>
                         <!-- Jika ingin menggunakan role default, masukkan hidden input -->
-                        <input type="hidden" name="role" value="student" />
+                        <input type="hidden" name="role" value="user" />
                         <div>
                             <label for="register_password" class="block text-gray-700 font-medium mb-2">Kata
                                 Sandi</label>
