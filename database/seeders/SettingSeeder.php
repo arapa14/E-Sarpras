@@ -22,6 +22,10 @@ class SettingSeeder extends Seeder
                 'key' => 'logo',
                 'value' => 'storage/logos/E-Sarpras.jpg'
             ],
+            [
+                'key' => 'main_image',
+                'value' => 'storage/logos/e-sarpras-landing.png'
+            ]
         ];
 
         foreach ($settings as $setting) {
