@@ -20,5 +20,6 @@ Route::get('/server-time', [serverController::class, 'getServerTime']);
 
 // Route User
 Route::middleware(['auth', 'isUser'])->group(function () {
+    Route::get('/pengaduan', [ComplaintController::class, 'index'])->name('complaint.index');
     Route::post('/complaint', [ComplaintController::class, 'store'])->name('complaint.store');
 });

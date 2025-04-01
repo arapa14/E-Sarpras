@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Complaint;
+use App\Models\Location;
+use App\Models\Setting;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -18,7 +20,13 @@ class ComplaintController extends Controller
      */
     public function index()
     {
-        //
+        $user = Auth::user();
+        $apk = Setting::where('key', 'name')->first()->value;
+        $logo = Setting::where('key', 'logo')->first()->value;
+        $locations = Location::all();
+
+        $data = compact('user', 'apk', 'logo','locations');
+        return view('user.complaint', $data);
     }
 
     /**
