@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Faq;
 use App\Models\Setting;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -10,6 +11,15 @@ use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
+    public function index() {
+        $name = Setting::where('key', 'name')->first()->value;
+        $logo = Setting::where('key', 'logo')->first()->value;
+        $faqs = Faq::all();
+
+        $data = compact('name', 'logo', 'faqs');
+        return view('landing', $data);
+    }
+    
     /**
      * Tampilkan form login.
      */

@@ -28,7 +28,20 @@ class QuestionController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // Validasi input dari form
+        $request->validate([
+            'question' => 'required|string',
+        ]);
+
+        try {
+            $question = new Question();
+            $question->question = $request->input('question');
+            $question->save();
+
+            return redirect()->back()->with('success', 'Pertanyaan berhasil dikirim.');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Terjadi kesalahan saat mengirim pertanyaan.');
+        }
     }
 
     /**
