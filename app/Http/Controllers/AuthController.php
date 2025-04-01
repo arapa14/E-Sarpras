@@ -11,15 +11,17 @@ use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
-    public function index() {
+    public function index()
+    {
         $name = Setting::where('key', 'name')->first()->value;
         $logo = Setting::where('key', 'logo')->first()->value;
+        $img = Setting::where('key', 'main_image')->first()->value;
         $faqs = Faq::all();
 
-        $data = compact('name', 'logo', 'faqs');
+        $data = compact('name', 'logo', 'faqs', 'img');
         return view('landing', $data);
     }
-    
+
     /**
      * Tampilkan form login.
      */
@@ -27,6 +29,7 @@ class AuthController extends Controller
     {
         $name = Setting::where('key', 'name')->first()->value;
         $logo = Setting::where('key', 'logo')->first()->value;
+
         return view('auth.login', compact('name', 'logo'));
     }
 
@@ -48,7 +51,7 @@ class AuthController extends Controller
         }
 
         // Flash message error
-        return redirect()->back()->with('error', 'Email atau password salah!');
+        return redirect()->back()->withInput()->with('error', 'Email atau password salah!');
     }
 
     /**
@@ -56,30 +59,34 @@ class AuthController extends Controller
      */
     public function registerSubmit(Request $request)
     {
-        $request->validate([
-            'name'       => 'required|string|max:255',
-            'email'      => 'required|email|unique:users,email',
-            'role'       => 'required|string',
-            'whatsapp'   => 'required|numeric',
-            'password'   => 'required|min:8|confirmed',
-            // Pastikan input "password_confirmation" ada di form
-        ]);
+        try {
+            $request->validate([
+                'name'       => 'required|string|max:255',
+                'email'      => 'required|email|unique:users,email',
+                'whatsapp'   => 'required|numeric|:min:10',
+                'password'   => 'required|min:8|confirmed',
+            ]);
 
-        // Membuat user baru dengan role default 'user'
-        $user = User::create([
-            'name'     => $request->name,
-            'email'    => $request->email,
-            'whatsapp' => $request->whatsapp,
-            'role'     => $request->input('role', 'user'),
-            'password' => Hash::make($request->password),
-        ]);
+            $user = User::create([
+                'name'     => $request->name,
+                'email'    => $request->email,
+                'whatsapp' => $request->whatsapp,
+                'role'     => $request->input('role', 'user'),
+                'password' => Hash::make($request->password),
+            ]);
 
-        // Login otomatis setelah registrasi berhasil
-        Auth::login($user);
-        $request->session()->regenerate();
-
-        return redirect()->route('dashboard')->with('success', 'Registrasi berhasil!');
+            Auth::login($user);
+            $request->session()->regenerate();
+            return redirect()->route('dashboard')->with('success', 'Registrasi berhasil!');
+        } catch (\Exception $e) {
+            return redirect()->back()
+                ->withInput()
+                ->with('error', 'Terjadi kesalahan saat registrasi.')
+                ->with('form', 'register'); // flag untuk tetap di tab register
+        }
     }
+
+
 
     /**
      * Proses logout.

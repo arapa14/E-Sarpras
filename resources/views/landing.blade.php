@@ -29,7 +29,7 @@
         <!-- Web Info Section -->
         <section id="web-info" class="flex flex-col md:flex-row items-center">
             <div class="md:w-1/2">
-                <img src="{{ asset('storage/logos/e-sarpras-landing.png') }}" alt="Informasi e-Sarpras"
+                <img src="{{ asset($img) }}" alt="Informasi e-Sarpras"
                     class="w-full rounded-lg shadow">
             </div>
             <div class="md:w-1/2 md:pl-8 mt-4 md:mt-0">
