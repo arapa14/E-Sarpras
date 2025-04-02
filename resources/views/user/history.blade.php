@@ -87,6 +87,7 @@
                                 <th class="border border-gray-300 px-4 py-2 text-left">Deskripsi</th>
                                 <th class="border border-gray-300 px-4 py-2 text-left">Lokasi</th>
                                 <th class="border border-gray-300 px-4 py-2 text-left">Saran</th>
+                                <th class="border border-gray-300 px-4 py-2 text-left">Waktu</th>
                                 <th class="border border-gray-300 px-4 py-2 text-center">Status</th>
                                 <th class="border border-gray-300 px-4 py-2 text-center whitespace-nowrap">Aksi</th>
                             </tr>
@@ -142,6 +143,10 @@
                     {
                         data: 'suggestion',
                         name: 'suggestion'
+                    },
+                    {
+                        data: 'created_at',
+                        name: 'created_at'
                     },
                     {
                         data: 'status',

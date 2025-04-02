@@ -264,27 +264,35 @@ class ComplaintController extends Controller
                 return "<span class='px-3 py-1 $statusClass rounded-full text-xs font-semibold uppercase'>$row->status</span>";
             })
             ->addColumn('action', function ($row) {
+                // Tombol untuk melihat semua gambar
                 $images = json_decode($row->before_image, true);
                 $imagesJson = htmlspecialchars(json_encode($images), ENT_QUOTES, 'UTF-8');
-                $button = '<button class="action-icon btn-view p-2" onclick="openImagesModal(\'' . $imagesJson . '\')" title="Lihat Semua Gambar">
-                            <i class="fa-solid fa-images"></i>
-                       </button>';
-                return '<div class="flex justify-center">' . $button . '</div>';
+                $buttonImages = '<button class="action-icon btn-view p-2" onclick="openImagesModal(\'' . $imagesJson . '\')" title="Lihat Semua Gambar">
+                                <i class="fa-solid fa-images"></i>
+                             </button>';
+                // Tombol untuk melihat detail laporan
+                $buttonDetail = '<a href="' . route('complaint.detail', $row->id) . '" class="action-icon p-2" title="Lihat Detail">
+                                <i class="fa-solid fa-eye"></i>
+                             </a>';
+                return '<div class="flex justify-center space-x-2">' . $buttonImages . $buttonDetail . '</div>';
             })
             ->rawColumns(['status', 'action'])
             ->make(true);
     }
-
-
-
-
 
     /**
      * Display the specified resource.
      */
     public function show(Complaint $complaint)
     {
-        //
+        $user = Auth::user();
+        $apk = Setting::where('key', 'name')->first()->value;
+        $logo = Setting::where('key', 'logo')->first()->value;
+        // Pastikan model Complaint memiliki relasi 'responses'
+        $complaint->load('response');
+
+        $data = compact('user', 'apk', 'logo', 'complaint');
+        return view('user.detail', $data);
     }
 
     /**

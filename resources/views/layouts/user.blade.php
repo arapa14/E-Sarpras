@@ -12,7 +12,6 @@
     <!-- Sertakan CSS Toastr -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
     <style>
-        /* Sidebar dengan gradasi modern dan efek hover yang lembut */
         .sidebar {
             background: linear-gradient(135deg, #1e3a8a, #1e40af);
         }
@@ -103,14 +102,24 @@
             <nav id="sidebar"
                 class="sidebar p-4 w-64 fixed inset-y-0 left-0 z-100 transform -translate-x-full transition-transform duration-300 z-20 sm:relative sm:translate-x-0">
                 <!-- Logo & Nama Aplikasi (hanya untuk mobile) -->
-                <div class="sm:hidden flex flex-col items-center border-b border-yellow-500 pb-4 mb-4">
+
+                <div class="sm:hidden flex flex-col items-center pb-2 mb-4">
                     <div class="w-16 h-16 mb-2">
-                        <img src="{{ $logo }}" alt="{{ $apk }}"
+                        <img src="{{ asset($logo) }}" alt="{{ $apk }}"
                             class="w-full h-full object-cover rounded-full border-2 border-white shadow-lg transform hover:scale-110 transition duration-300">
                     </div>
                     <h2 class="logo text-xl font-semibold tracking-wide text-yellow-400 drop-shadow">
                         {{ $apk }}
                     </h2>
+                    <!-- Divider untuk $apk -->
+                    <div class="w-full border-b border-yellow-500 my-2"></div>
+
+                    @if ($user)
+                        <p class="text-white font-medium mt-2">{{ auth()->user()->name ?? 'User' }}</p>
+                        <span class="text-sm text-yellow-300">{{ ucfirst(auth()->user()->role) }}</span>
+                        <!-- Divider untuk role -->
+                        <div class="w-full border-b pt-2 border-yellow-500 my-2"></div>
+                    @endif
                 </div>
 
                 <!-- Navigasi Sidebar -->
@@ -129,7 +138,7 @@
                     </li>
                     <li>
                         <a href="{{ route('complaint.riwayat') }}"
-                            class="flex items-center p-3 rounded transition-colors duration-300 {{ request()->is('history') ? 'active' : '' }}">
+                            class="flex items-center p-3 rounded transition-colors duration-300 {{ request()->is('riwayat') ? 'active' : '' }}">
                             <i class="fas fa-history mr-3"></i> Riwayat Pengaduan
                         </a>
                     </li>
