@@ -7,6 +7,8 @@
     <title>{{ $name }}</title>
     <link rel="icon" type="image/png" href="{{ asset($logo) }}">
     @vite('resources/css/app.css')
+    <!-- Sertakan CSS Toastr -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
 </head>
 
 <body class="bg-gray-100 font-sans">
@@ -29,8 +31,7 @@
         <!-- Web Info Section -->
         <section id="web-info" class="flex flex-col md:flex-row items-center">
             <div class="md:w-1/2">
-                <img src="{{ asset($img) }}" alt="Informasi e-Sarpras"
-                    class="w-full rounded-lg shadow">
+                <img src="{{ asset($img) }}" alt="Informasi e-Sarpras" class="w-full rounded-lg shadow">
             </div>
             <div class="md:w-1/2 md:pl-8 mt-4 md:mt-0">
                 <h2 class="text-2xl font-bold mb-4">Apa itu e-Sarpras?</h2>
@@ -106,6 +107,20 @@
     <footer class="bg-gray-200 text-center p-4">
         &copy; {{ date('Y') }} SMKN 1 Jakarta. All rights reserved.
     </footer>
+
+    <!-- Sertakan jQuery dan Toastr -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+    <script>
+        @if (session('success'))
+            toastr.success("{{ session('success') }}");
+        @endif
+
+        @if (session('error'))
+            toastr.error("{{ session('error') }}");
+        @endif
+    </script>
 </body>
 
 </html>

@@ -9,6 +9,8 @@
     <link rel="icon" type="image/png" href="{{ asset($logo ?? 'default-logo.png') }}" />
     @vite('resources/css/app.css')
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
+    <!-- Sertakan CSS Toastr -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
     <style>
         /* Sidebar dengan gradasi dan styling yang lebih modern */
         .sidebar {
@@ -161,7 +163,7 @@
             const hours = now.getHours().toString().padStart(2, '0');
             const minutes = now.getMinutes().toString().padStart(2, '0');
             document.getElementById('realTimeClock').innerText =
-            `${dayName}, ${day} ${month} ${year} - ${hours}:${minutes}`;
+                `${dayName}, ${day} ${month} ${year} - ${hours}:${minutes}`;
         }
         updateClock();
         setInterval(updateClock, 30000);
@@ -179,6 +181,20 @@
             sidebar.classList.add('-translate-x-full');
             sidebarOverlay.classList.add('hidden');
         });
+    </script>
+
+    <!-- Sertakan jQuery dan Toastr -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+    <script>
+        @if (session('success'))
+            toastr.success("{{ session('success') }}");
+        @endif
+
+        @if (session('error'))
+            toastr.error("{{ session('error') }}");
+        @endif
     </script>
 </body>
 

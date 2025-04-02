@@ -26,10 +26,38 @@
             border-color: transparent;
             color: #6b7280;
         }
+
+        /* Styling untuk overlay spinner */
+        #loadingOverlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 999;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        #loadingOverlay .spinner {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
     </style>
 </head>
 
 <body class="bg-gradient-to-r from-blue-100 to-blue-50 font-sans">
+    <!-- Overlay Spinner -->
+    <div id="loadingOverlay">
+        <div class="spinner">
+            <svg class="animate-spin h-12 w-12 text-white" xmlns="http://www.w3.org/2000/svg" fill="none"
+                viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4">
+                </circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+            </svg>
+        </div>
+    </div>
+
     <div class="flex items-center justify-center min-h-screen p-4 sm:p-6">
         <div class="bg-white rounded-2xl shadow-2xl flex flex-col md:flex-row w-full max-w-4xl overflow-hidden">
             <!-- Branding Panel -->
@@ -141,15 +169,13 @@
                             Register
                         </button>
                     </form>
-
                 </div>
                 <!-- Link untuk switch form -->
                 <div class="mt-2 text-center">
                     <p id="switchText" class="text-gray-600 text-sm">
                         Lupa password?
-                        <a href="#" class="text-blue-600 hover:underline focus:outline-none">
-                            Reset Kata Sandi
-                        </a>
+                        <a href="#" class="text-blue-600 hover:underline focus:outline-none">Reset Kata
+                            Sandi</a>
                     </p>
                 </div>
             </div>
@@ -158,11 +184,15 @@
     </div>
 
     <script>
+        // Fungsi untuk menampilkan spinner
+        function showSpinner() {
+            document.getElementById('loadingOverlay').style.display = 'block';
+        }
+
         // Validasi format email untuk login
         function validateLoginEmail(input) {
             const emailError = document.getElementById('emailError');
             const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            // Tampilkan error jika format email tidak valid
             if (!regex.test(input.value)) {
                 emailError.classList.remove('hidden');
             } else {
@@ -174,7 +204,6 @@
         function validateRegisterEmail(input) {
             const emailError = document.getElementById('registerEmailError');
             const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            // Tampilkan error jika format email tidak valid
             if (!regex.test(input.value)) {
                 emailError.classList.remove('hidden');
             } else {
@@ -190,7 +219,6 @@
             } else {
                 passwordError.classList.add('hidden');
             }
-            // Juga periksa apakah konfirmasi password masih sesuai
             validatePasswordConfirmation(document.getElementById('register_password_confirmation'));
         }
 
@@ -208,9 +236,8 @@
         // Validasi nomor WhatsApp: hanya angka dan minimal 10 digit
         function validateWhatsApp(input) {
             const whatsappError = document.getElementById('whatsappError');
-            // Menghapus spasi dan tanda lainnya jika diperlukan
             const value = input.value.trim();
-            const regex = /^\d+$/; // hanya angka
+            const regex = /^\d+$/;
             if (!regex.test(value) || value.length < 10) {
                 whatsappError.classList.remove('hidden');
             } else {
@@ -254,45 +281,50 @@
             document.getElementById('switchToLogin').addEventListener('click', showLogin);
         }
 
-        // Tambahkan event listener ke tab
         loginTab.addEventListener('click', showLogin);
         registerTab.addEventListener('click', showRegister);
 
-        // Periksa flag session untuk menentukan tampilan awal
         @if (session('form') == 'register')
             showRegister();
         @else
             showLogin();
         @endif
 
-        // Script untuk berpindah field saat menekan tombol Enter
-        document.querySelectorAll('form').forEach(function(form) {
-            const inputs = Array.from(form.querySelectorAll('input')).filter(input => input.type !== 'hidden');
+        // Navigasi antar field saat tekan Enter
+        document.querySelectorAll("form").forEach(function(form) {
+            const inputs = Array.from(form.querySelectorAll("input")).filter(
+                (input) => input.type !== "hidden"
+            );
+
             inputs.forEach((input, index) => {
-                input.addEventListener('keydown', function(e) {
+                input.addEventListener("keydown", function(e) {
                     if (e.key === "Enter") {
-                        e.preventDefault();
+                        e.preventDefault(); // Mencegah submit default
                         if (index < inputs.length - 1) {
-                            inputs[index + 1].focus();
-                        } else {
-                            form.submit();
+                            inputs[index + 1].focus(); // Pindah ke input berikutnya
                         }
+                        // } else {
+                        //     form.submit(); 
+                        // }
                     }
                 });
             });
         });
     </script>
 
-
-    <!-- Sertakan jQuery terlebih dahulu -->
+    <!-- Sertakan jQuery dan Toastr -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <!-- Sertakan JS Toastr -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
+    <!-- Tempatkan script di akhir body -->
     <script>
-        document.getElementById("registerForm").addEventListener("submit", function(event) {
-            event.preventDefault(); // Mencegah pengiriman form sebelum validasi
+        // Fungsi untuk menampilkan spinner
+        function showSpinner() {
+            document.getElementById('loadingOverlay').style.display = 'block';
+        }
 
+        // Fungsi validasi untuk form register
+        function validateRegisterForm() {
             let username = document.getElementById("register_name").value.trim();
             let email = document.getElementById("register_email").value.trim();
             let whatsapp = document.getElementById("register_whatsapp").value.trim();
@@ -309,7 +341,7 @@
                 valid = false;
             }
             if (!/^\d{10,}$/.test(whatsapp)) {
-                toastr.error('Nomor WhatsApp harus berupa angka dan minimal 10 digit');
+                toastr.error("Nomor WhatsApp harus berupa angka dan minimal 10 digit");
                 valid = false;
             }
             if (password.length < 8) {
@@ -320,11 +352,36 @@
                 toastr.error("Konfirmasi password tidak cocok");
                 valid = false;
             }
-            if (valid) {
-                this.submit(); // Mengirimkan form jika semua validasi terpenuhi
+            return valid;
+        }
+
+        document.getElementById("registerForm").addEventListener("submit", function(event) {
+            event.preventDefault(); // Cegah submit default
+            if (validateRegisterForm()) {
+                showSpinner(); // Tampilkan spinner jika validasi berhasil
+                this.submit(); // Submit langsung tanpa delay
             }
         });
+
+        document.getElementById("loginForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+            let email = document.getElementById("login_email").value.trim();
+            let password = document.getElementById("login_password").value.trim();
+            if (email === "" || password === "") {
+                toastr.error("Email dan password harus diisi");
+                return;
+            }
+            showSpinner();
+            this.submit(); // Submit langsung tanpa delay
+        });
+
+
+        // Pastikan kode di atas dijalankan setelah DOM siap
+        document.addEventListener("DOMContentLoaded", function() {
+            // Kode di atas sudah terpasang di sini atau pastikan dipanggil setelah DOM terload.
+        });
     </script>
+
 
     <script>
         @if (session('success'))
