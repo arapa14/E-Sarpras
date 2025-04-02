@@ -7,7 +7,7 @@
 
 @section('content')
     <div class="bg-white shadow-md rounded-lg p-6">
-        <h2 class="text-lg font-semibold mb-4">Submit Laporan Komplain</h2>
+        <h2 class="text-lg font-semibold mb-4">Submit Laporan Pengaduan</h2>
 
         @if ($errors->any())
             <div id="error-message" class="p-3 mb-4 text-sm text-red-600 bg-red-100 rounded">
