@@ -271,9 +271,9 @@ class ComplaintController extends Controller
                                 <i class="fa-solid fa-images"></i>
                              </button>';
                 // Tombol untuk melihat detail laporan
-                $buttonDetail = '<a href="' . route('complaint.detail', $row->id) . '" class="action-icon p-2" title="Lihat Detail">
-                                <i class="fa-solid fa-eye"></i>
-                             </a>';
+                $buttonDetail = '<a href="' . route('complaint.detail', $row->id) . '" class="action-icon btn-detail p-2" title="Lihat Detail">
+                    <i class="fa-solid fa-eye fa-lg"></i>
+                 </a>';
                 return '<div class="flex justify-center space-x-2">' . $buttonImages . $buttonDetail . '</div>';
             })
             ->rawColumns(['status', 'action'])

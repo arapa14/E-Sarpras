@@ -66,6 +66,16 @@
             background-color: #10b981;
             color: #ffffff;
         }
+
+        .btn-detail {
+            background-color: #2563eb;
+            /* Warna biru yang sedikit berbeda dari btn-view */
+            color: #ffffff;
+        }
+
+        .btn-detail:hover {
+            background-color: #1d4ed8;
+        }
     </style>
 @endsection
 
