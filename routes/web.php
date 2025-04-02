@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [AuthController::class, 'index'])->name('landing');
-Route::get('/login', [AuthController::class, 'login'])->name('login');
+Route::get('/auth', [AuthController::class, 'login'])->name('login');
 Route::post('/login', [AuthController::class, 'loginSubmit'])->name('login.submit');
 Route::post('/register', [AuthController::class, 'registerSubmit'])->name('register.submit');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
@@ -27,4 +27,6 @@ Route::post('/question', [QuestionController::class, 'store'])->name('question.s
 Route::middleware(['auth', 'isUser'])->group(function () {
     Route::get('/pengaduan', [ComplaintController::class, 'index'])->name('complaint.index');
     Route::post('/complaint', [ComplaintController::class, 'store'])->name('complaint.store');
+    Route::get('/riwayat', [ComplaintController::class, 'riwayat'])->name('complaint.riwayat');
+    Route::get('/riwayat/data', [ComplaintController::class, 'getRiwayat'])->name('complaint.getRiwayat');
 });

@@ -140,6 +140,11 @@
                 $('#image-upload-container').append(newField);
                 imageCounter++;
             });
+
+            // Tambahkan event untuk memanggil lazy loading ketika form disubmit
+            $('#reportForm').on('submit', function() {
+                showSpinner();
+            });
         });
 
         // Fungsi untuk menampilkan preview gambar dan menyembunyikan default content

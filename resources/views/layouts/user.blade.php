@@ -12,9 +12,9 @@
     <!-- Sertakan CSS Toastr -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
     <style>
-        /* Sidebar dengan gradasi dan styling yang lebih modern */
+        /* Sidebar dengan gradasi modern dan efek hover yang lembut */
         .sidebar {
-            background: linear-gradient(to bottom right, #1e3a8a, #1e40af);
+            background: linear-gradient(135deg, #1e3a8a, #1e40af);
         }
 
         .sidebar a {
@@ -23,7 +23,7 @@
 
         .sidebar a:hover,
         .sidebar a.active {
-            background-color: rgba(255, 255, 255, 0.2);
+            background-color: rgba(255, 255, 255, 0.15);
             color: #ffffff;
         }
 
@@ -35,94 +35,105 @@
             transform: translateX(5px);
         }
 
-        /* Logo dan nama aplikasi pada sidebar */
-        .sidebar .logo {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: #facc15;
+        /* Animasi untuk spinner */
+        #loadingOverlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 999;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        #loadingOverlay .spinner {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
         }
     </style>
-
     @yield('styles')
 </head>
 
 <body class="bg-gray-50 font-sans">
+    <!-- Overlay Spinner -->
+    <div id="loadingOverlay">
+        <div class="spinner">
+            <svg class="animate-spin h-12 w-12 text-white" xmlns="http://www.w3.org/2000/svg" fill="none"
+                viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4">
+                </circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+            </svg>
+        </div>
+    </div>
+
     <div class="min-h-screen flex flex-col">
-        <!-- Header -->
-        <!-- Header khusus untuk Mobile -->
-        <header class="bg-white shadow p-4 sm:hidden">
+        <!-- Header khusus untuk Mobile (fixed dan transparan) -->
+        <header class="fixed top-0 inset-x-0 z-50 bg-gradient-to-r from-blue-600 to-blue-800 shadow-md p-4 sm:hidden">
             <div class="flex items-center justify-between">
-                <!-- Tombol Toggle Sidebar -->
-                <button id="sidebarToggle" class="text-gray-600 focus:outline-none">
+                <button id="sidebarToggle" class="text-white focus:outline-none">
                     <i class="fas fa-bars fa-2x"></i>
                 </button>
-                <!-- Tampilan Jam dengan styling lebih besar dan tegas -->
-                <span id="realTimeClock" class="text-gray-700 font-semibold text-lg">Memuat Waktu...</span>
-                <!-- Placeholder untuk menjaga posisi tengah -->
+                <span id="realTimeClock" class="text-white font-semibold text-lg">Memuat Waktu...</span>
                 <div class="w-8"></div>
             </div>
         </header>
 
         <!-- Header untuk Desktop -->
-        <header class="bg-white shadow p-4 hidden sm:flex justify-between items-center">
+        <header class="bg-white shadow flex justify-between items-center p-4 hidden sm:flex">
             <div class="flex items-center gap-4">
-                <img src="{{ asset($logo ?? 'default-logo.png') }}" alt="Logo" class="w-12 h-12 object-cover">
-                <h1 class="text-xl font-bold text-blue-600">Selamat datang, {{ auth()->user()->name ?? 'User' }}</h1>
+                <img src="{{ asset($logo ?? 'default-logo.png') }}" alt="Logo"
+                    class="w-12 h-12 object-cover rounded-full border border-gray-200 shadow-md">
+                <h1 class="text-2xl font-bold text-blue-700">Selamat datang, {{ auth()->user()->name ?? 'User' }}</h1>
             </div>
             <div class="flex items-center gap-4">
-                <form action="{{ route('logout') }}" method="POST" class="flex items-center">
+                <form action="{{ route('logout') }}" method="POST">
                     @csrf
-                    <button type="submit" class="flex items-center text-red-600 hover:text-red-800">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mr-1" fill="none"
-                            stroke="currentColor" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round"
-                            stroke-linejoin="round">
-                            <path d="M16 17l5-5-5-5M21 12H9m4-7v14"></path>
-                        </svg>
+                    <button type="submit" class="flex items-center text-red-600 hover:text-red-800 transition-colors">
+                        <i class="fas fa-sign-out-alt fa-lg mr-1"></i>
                         <span>Logout</span>
                     </button>
                 </form>
             </div>
         </header>
 
-        <!-- Container -->
-        <div class="flex flex-1 relative">
+        <!-- Kontainer utama -->
+        <div class="flex flex-1 relative pt-16 sm:pt-0">
             <!-- Sidebar -->
             <nav id="sidebar"
-                class="sidebar p-4 w-64 fixed inset-y-0 left-0 transform -translate-x-full transition-transform duration-300 z-20 sm:relative sm:translate-x-0">
-                <!-- Logo & App Name (hanya muncul pada tampilan mobile) -->
+                class="sidebar p-4 w-64 fixed inset-y-0 left-0 z-100 transform -translate-x-full transition-transform duration-300 z-20 sm:relative sm:translate-x-0">
+                <!-- Logo & Nama Aplikasi (hanya untuk mobile) -->
                 <div class="sm:hidden flex flex-col items-center border-b border-yellow-500 pb-4 mb-4">
-                    <div class="relative flex flex-col items-center justify-center">
-                        <div class="w-12 h-12 mb-2 relative">
-                            <img src="{{ $logo }}" alt="{{ $apk }}"
-                                class="w-full h-full object-cover rounded-full border border-white shadow-md transform hover:scale-110 transition duration-300 ease-in-out">
-                        </div>
-                        <h2 class="logo tracking-wide drop-shadow">
-                            {{ $apk }}
-                        </h2>
+                    <div class="w-16 h-16 mb-2">
+                        <img src="{{ $logo }}" alt="{{ $apk }}"
+                            class="w-full h-full object-cover rounded-full border-2 border-white shadow-lg transform hover:scale-110 transition duration-300">
                     </div>
+                    <h2 class="logo text-xl font-semibold tracking-wide text-yellow-400 drop-shadow">
+                        {{ $apk }}
+                    </h2>
                 </div>
 
-                <!-- Sidebar Navigation Links -->
+                <!-- Navigasi Sidebar -->
                 <ul class="space-y-4">
                     <li>
                         <a href="{{ route('dashboard') }}"
-                            class="flex items-center p-3 rounded hover:bg-white hover:bg-opacity-20 transition-colors duration-300 {{ request()->is('dashboard') ? 'active bg-white bg-opacity-20' : '' }}">
+                            class="flex items-center p-3 rounded transition-colors duration-300 {{ request()->is('dashboard') ? 'active' : '' }}">
                             <i class="fas fa-tachometer-alt mr-3"></i> Dashboard
                         </a>
                     </li>
                     <li>
                         <a href="{{ route('complaint.index') }}"
-                            class="flex items-center p-3 rounded hover:bg-white hover:bg-opacity-20 transition-colors duration-300 {{ request()->is('pengaduan') ? 'active bg-white bg-opacity-20' : '' }}">
+                            class="flex items-center p-3 rounded transition-colors duration-300 {{ request()->is('pengaduan') ? 'active' : '' }}">
                             <i class="fas fa-comment-alt mr-3"></i> Buat Pengaduan
                         </a>
                     </li>
                     <li>
-                        <a href="javascript:void(0)"
-                            class="flex items-center p-3 rounded hover:bg-white hover:bg-opacity-20 transition-colors duration-300 {{ request()->is('history') ? 'active bg-white bg-opacity-20' : '' }}">
+                        <a href="{{ route('complaint.riwayat') }}"
+                            class="flex items-center p-3 rounded transition-colors duration-300 {{ request()->is('history') ? 'active' : '' }}">
                             <i class="fas fa-history mr-3"></i> Riwayat Pengaduan
                         </a>
                     </li>
-                    <!-- Tombol Logout (hanya tampil di mobile) -->
+                    <!-- Tombol Logout (untuk mobile) -->
                     <li class="sm:hidden">
                         <form action="{{ route('logout') }}" method="POST">
                             @csrf
@@ -135,23 +146,30 @@
                 </ul>
             </nav>
 
-            <!-- Overlay Sidebar untuk mobile -->
+            <!-- Overlay untuk Sidebar pada tampilan mobile -->
             <div id="sidebarOverlay" class="fixed inset-0 bg-black opacity-50 hidden z-10 sm:hidden"></div>
 
-            <!-- Konten Dinamis -->
-            <main class="flex-1 p-6 ml-0 sm:ml-6 transition-all duration-300">
+            <!-- Konten Utama -->
+            <main class="flex-1 p-6 ml-0 mt-5 pb-15 transition-all duration-300">
                 @yield('content')
             </main>
         </div>
 
-        <!-- Footer -->
-        <footer class="bg-gray-200 text-center p-4">
-            &copy; {{ date('Y') }} SMKN 1 Jakarta. All rights reserved.
+        <!-- Footer Fixed -->
+        <footer
+            class="fixed bottom-0 inset-x-0 bg-gradient-to-r from-blue-600 to-blue-800 text-white text-center p-4 z-50">
+            <p>&copy; {{ date('Y') }} SMKN 1 Jakarta. All rights reserved.</p>
         </footer>
     </div>
 
     <!-- Script -->
     <script>
+        // Fungsi menampilkan spinner
+        function showSpinner() {
+            document.getElementById('loadingOverlay').style.display = 'block';
+        }
+
+        // Fungsi update waktu real-time
         function updateClock() {
             const now = new Date();
             const days = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
@@ -170,6 +188,7 @@
         updateClock();
         setInterval(updateClock, 30000);
 
+        // Toggle Sidebar untuk mobile
         const sidebarToggle = document.getElementById('sidebarToggle');
         const sidebar = document.getElementById('sidebar');
         const sidebarOverlay = document.getElementById('sidebarOverlay');

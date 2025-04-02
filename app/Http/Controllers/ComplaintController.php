@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Storage;
 use Intervention\Image\ImageManager;
 use Intervention\Image\Drivers\Gd\Driver;
 use Intervention\Image\Geometry\Factories\RectangleFactory;
+use Yajra\DataTables\Facades\DataTables;
 
 class ComplaintController extends Controller
 {
@@ -27,14 +28,6 @@ class ComplaintController extends Controller
 
         $data = compact('user', 'apk', 'logo', 'locations');
         return view('user.complaint', $data);
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
     }
 
     /**
@@ -241,6 +234,49 @@ class ComplaintController extends Controller
             return redirect()->back()->with('error', 'Gagal mengirim komplain.');
         }
     }
+
+    public function riwayat()
+    {
+        $user = Auth::user();
+        $apk = Setting::where('key', 'name')->first()->value;
+        $logo = Setting::where('key', 'logo')->first()->value;
+
+        $data = compact('user', 'apk', 'logo');
+        return view('user.history', $data);
+    }
+
+    // Menghandle AJAX request dari DataTables
+    public function getRiwayat(Request $request)
+    {
+        $userId = Auth::id(); // Hanya ambil pengaduan milik user yang sedang login
+        $history = Complaint::where('user_id', $userId)->orderBy('created_at', 'desc');
+
+        return DataTables::of($history)
+            ->addIndexColumn()
+            ->editColumn('status', function ($row) {
+                // Sesuaikan badge status berdasarkan nilai status di database
+                $statusClass = match ($row->status) {
+                    'pending'  => 'bg-yellow-100 text-yellow-600',
+                    'progress' => 'bg-blue-100 text-blue-600',
+                    'selesai'  => 'bg-green-100 text-green-600',
+                    default    => 'bg-gray-100 text-gray-600'
+                };
+                return "<span class='px-3 py-1 $statusClass rounded-full text-xs font-semibold uppercase'>$row->status</span>";
+            })
+            ->addColumn('action', function ($row) {
+                $images = json_decode($row->before_image, true);
+                $imagesJson = htmlspecialchars(json_encode($images), ENT_QUOTES, 'UTF-8');
+                $button = '<button class="action-icon btn-view p-2" onclick="openImagesModal(\'' . $imagesJson . '\')" title="Lihat Semua Gambar">
+                            <i class="fa-solid fa-images"></i>
+                       </button>';
+                return '<div class="flex justify-center">' . $button . '</div>';
+            })
+            ->rawColumns(['status', 'action'])
+            ->make(true);
+    }
+
+
+
 
 
     /**
