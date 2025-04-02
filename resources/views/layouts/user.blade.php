@@ -42,6 +42,8 @@
             color: #facc15;
         }
     </style>
+
+    @yield('styles')
 </head>
 
 <body class="bg-gray-50 font-sans">
@@ -187,15 +189,19 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
-    <script>
-        @if (session('success'))
+    @if (session('success'))
+        <script>
             toastr.success("{{ session('success') }}");
-        @endif
+        </script>
+    @endif
 
-        @if (session('error'))
+    @if (session('error'))
+        <script>
             toastr.error("{{ session('error') }}");
-        @endif
-    </script>
+        </script>
+    @endif
+
+    @yield('scripts')
 </body>
 
 </html>

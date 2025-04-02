@@ -25,7 +25,7 @@ class ComplaintController extends Controller
         $logo = Setting::where('key', 'logo')->first()->value;
         $locations = Location::all();
 
-        $data = compact('user', 'apk', 'logo','locations');
+        $data = compact('user', 'apk', 'logo', 'locations');
         return view('user.complaint', $data);
     }
 
@@ -194,17 +194,18 @@ class ComplaintController extends Controller
     {
         // Validasi input dari form
         $request->validate([
-            'before_image' => 'required|file|image|mimes:jpg,png,jpeg|max:4096',
-            'description'  => 'required|string',
-            'location'     => 'required|string|not_in:Pilih lokasi',
-            'suggestion'   => 'required|string',
+            'before_image' => 'required|array|min:1', // Validasi array gambar
+            'before_image.*' => 'file|image|mimes:jpg,png,jpeg', // Setiap gambar harus valid
+            'description' => 'required|string',
+            'location' => 'required|string|not_in:Pilih lokasi',
+            'suggestion' => 'required|string',
         ]);
 
         $user = Auth::user();
+        $imagePaths = []; // Array untuk menyimpan path gambar
 
         // Nama prefix untuk gambar
         $imageNamePrefix = 'complain';
-
         // Direktori penyimpanan gambar
         $directory = 'complaints';
         if (!Storage::exists("public/{$directory}")) {
@@ -214,21 +215,24 @@ class ComplaintController extends Controller
         // Watermark: nama user + timestamp
         $watermarkText = $user->name . " - " . now()->format('d/m/Y H:i:s');
 
-        // Path font (pastikan file font ada di folder public)
+        // Path font
         $fontPath = public_path('arial.ttf');
 
-        // Proses gambar sebelum (before_image)
-        $imagePath = $this->processImage($request->file('before_image'), $imageNamePrefix, $directory, $watermarkText, $fontPath);
+        // Proses semua gambar yang diunggah
+        foreach ($request->file('before_image') as $imageFile) {
+            $imagePath = $this->processImage($imageFile, $imageNamePrefix, $directory, $watermarkText, $fontPath);
+            $imagePaths[] = $imagePath;
+        }
 
         try {
             // Simpan data complaint ke database
             $complaint = new Complaint();
-            $complaint->user_id     = $user->id;
+            $complaint->user_id = $user->id;
             $complaint->description = $request->input('description');
-            $complaint->location    = $request->input('location');
-            $complaint->suggestion  = $request->input('suggestion');
-            $complaint->before_image = $imagePath;
-            $complaint->status      = 'pending';
+            $complaint->location = $request->input('location');
+            $complaint->suggestion = $request->input('suggestion');
+            $complaint->before_image = json_encode($imagePaths); // Simpan sebagai JSON
+            $complaint->status = 'pending';
             $complaint->save();
 
             return redirect()->back()->with('success', 'Berhasil mengirim komplain.');
@@ -237,6 +241,7 @@ class ComplaintController extends Controller
             return redirect()->back()->with('error', 'Gagal mengirim komplain.');
         }
     }
+
 
     /**
      * Display the specified resource.
