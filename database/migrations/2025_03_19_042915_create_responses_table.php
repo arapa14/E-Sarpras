@@ -12,10 +12,11 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('responses', function (Blueprint $table) {
+            $table->id();
             $table->foreignId('complaint_id')->constrained('complaints')->onDelete('cascade');
-            $table->string('feedback')->nullable();
-            $table->string('after_image')->nullable();
-            $table->time('response_time')->nullable();
+            $table->string('feedback');
+            $table->string('after_image');
+            $table->integer('response_time');
             $table->timestamps();
         });
     }

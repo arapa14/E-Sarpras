@@ -293,7 +293,7 @@ class ComplaintController extends Controller
         $apk = Setting::where('key', 'name')->first()->value;
         $logo = Setting::where('key', 'logo')->first()->value;
         // Pastikan model Complaint memiliki relasi 'responses'
-        $complaint->load('response');
+        $complaint->load('responses');
 
         $data = compact('user', 'apk', 'logo', 'complaint');
         return view('user.detail', $data);
@@ -352,7 +352,7 @@ class ComplaintController extends Controller
                 $buttonImages = '<button class="action-icon btn-view p-2" onclick="openImagesModal(\'' . $imagesJson . '\')" title="Lihat Semua Gambar">
                                     <i class="fa-solid fa-images"></i>
                                  </button>';
-                $buttonDetail = '<a href="' . route('complaint.detail', $row->id) . '" class="action-icon btn-detail p-2" title="Lihat Detail">
+                $buttonDetail = '<a href="' . route('complaint.list.detail', $row->id) . '" class="action-icon btn-detail p-2" title="Lihat Detail">
                                     <i class="fa-solid fa-eye fa-lg"></i>
                                  </a>';
                 return '<div class="flex justify-center space-x-2">' . $buttonImages . $buttonDetail . '</div>';
@@ -373,6 +373,12 @@ class ComplaintController extends Controller
         return response()->json(['message' => 'Status berhasil diperbarui.']);
     }
 
+    public function detail(Complaint $complaint)
+    {
+        // Muat relasi user dan (jika ada) response jika diperlukan
+        $complaint->load('user', 'responses');
+        return view('admin.complaintDetail', compact('complaint'));
+    }
 
 
     /**

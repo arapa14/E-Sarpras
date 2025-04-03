@@ -89,7 +89,8 @@
                     @if ($complaint->responses && $complaint->responses->isNotEmpty())
                         @foreach ($complaint->responses as $response)
                             <div class="mb-4 border border-gray-200 rounded-lg p-4 shadow-sm">
-                                <p class="text-gray-700"><span class="font-bold">Feedback:</span> {{ $response->feedback }}
+                                <p class="text-gray-700">
+                                    <span class="font-bold">Feedback:</span> {{ $response->feedback }}
                                 </p>
                                 <p class="text-gray-500 mt-2">
                                     <span class="font-bold">Waktu Respon:</span>
@@ -98,7 +99,7 @@
                                 @if ($response->after_image)
                                     <div class="mt-4">
                                         <h3 class="text-lg font-semibold text-gray-800">Gambar Setelah Respon</h3>
-                                        <img src="{{ asset($response->after_image) }}" alt="Gambar Respon"
+                                        <img src="{{ asset('storage/' . $response->after_image) }}" alt="Gambar Respon"
                                             class="w-full h-48 object-cover rounded-lg shadow-md">
                                     </div>
                                 @endif
@@ -108,6 +109,7 @@
                         <p class="text-gray-600">Belum ada respon untuk pengaduan ini.</p>
                     @endif
                 </div>
+
             </div>
         </div>
     </div>

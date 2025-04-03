@@ -5,6 +5,7 @@ use App\Http\Controllers\ComplaintController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\FaqController;
 use App\Http\Controllers\QuestionController;
+use App\Http\Controllers\ResponseController;
 use App\Http\Controllers\serverController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -37,6 +38,11 @@ Route::middleware(['auth', 'isAdminOrSuperAdmin'])->group(function () {
     Route::get('/complaint', [ComplaintController::class, 'complaintList'])->name('complaint.list');
     Route::get('/pengaduan/data', [ComplaintController::class, 'getList'])->name('complaint.getList');
     Route::patch('/pengaduan/{complaint}/status', [ComplaintController::class, 'updateStatus'])->name('complaint.updateStatus');
+
+    // Route untuk halaman detail pengaduan
+    Route::get('/complaint/detail/{complaint}', [ComplaintController::class, 'detail'])->name('complaint.list.detail');
+    // Route untuk menyimpan respon admin
+    Route::post('/response/{complaint}', [ResponseController::class, 'store'])->name('response.store');
 
     Route::get('/faq', [FaqController::class, 'index'])->name('faq.index');
 });

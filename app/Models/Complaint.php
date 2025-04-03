@@ -21,7 +21,7 @@ class Complaint extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function response() {
+    public function responses() {
         return $this->hasMany(Response::class, 'complaint_id');
     }
 }
