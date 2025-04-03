@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Complaint;
 use App\Models\Response;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class ResponseController extends Controller
 {
@@ -29,11 +30,12 @@ class ResponseController extends Controller
      */
     public function store(Request $request, Complaint $complaint)
     {
-        // Validasi input
+        // Validasi input, pastikan after_image adalah array dan minimal memiliki 1 gambar
         $request->validate([
-            'feedback'    => 'required|string',
-            'after_image' => 'nullable|image|max:2048',
-            'status'      => 'required|in:pending,progress,selesai',
+            'feedback'      => 'required|string',
+            'after_image'   => 'required|array|min:1',
+            'after_image.*' => 'required|file|image|mimes:jpg,png,jpeg|max:2048',
+            'status'        => 'required|in:pending,progress,selesai',
         ]);
 
         // Hitung durasi respon dalam menit
@@ -46,11 +48,19 @@ class ResponseController extends Controller
             'response_time' => $duration, // Simpan jumlah menit
         ];
 
-        // Proses upload gambar jika ada
-        if ($request->hasFile('after_image')) {
-            $path = $request->file('after_image')->store('responses', 'public');
-            $data['after_image'] = $path;
+        // Inisialisasi array untuk menyimpan path gambar
+        $imagePaths = [];
+
+        // Proses upload gambar, karena gambar tidak opsional maka selalu ada
+        $directory = 'responses';
+        if (!Storage::exists("public/{$directory}")) {
+            Storage::makeDirectory("public/{$directory}");
         }
+        foreach ($request->file('after_image') as $imageFile) {
+            $path = $imageFile->store($directory, 'public');
+            $imagePaths[] = $path;
+        }
+        $data['after_image'] = json_encode($imagePaths);
 
         // Simpan data respon ke table responses
         Response::create($data);
@@ -61,7 +71,6 @@ class ResponseController extends Controller
         return redirect()->route('complaint.list.detail', $complaint->id)
             ->with('success', 'Respon berhasil dikirim.');
     }
-
 
     /**
      * Display the specified resource.
