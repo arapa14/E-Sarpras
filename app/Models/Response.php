@@ -12,6 +12,7 @@ class Response extends Model
         'complaint_id',
         'feedback',
         'after_image',
+        'new_status',
         'response_time',
     ];
 

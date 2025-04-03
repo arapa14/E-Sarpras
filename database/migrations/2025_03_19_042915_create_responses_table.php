@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('complaint_id')->constrained('complaints')->onDelete('cascade');
             $table->string('feedback');
             $table->string('after_image');
+            $table->enum('new_status', ['pending', 'progress', 'selesai']);
             $table->integer('response_time');
             $table->timestamps();
         });

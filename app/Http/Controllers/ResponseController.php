@@ -26,7 +26,7 @@ class ResponseController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store a newly created resource in storage.P_
      */
     public function store(Request $request, Complaint $complaint)
     {
@@ -45,6 +45,7 @@ class ResponseController extends Controller
         $data = [
             'complaint_id'  => $complaint->id,
             'feedback'      => $request->feedback,
+            'new_status'    => $request->status,
             'response_time' => $duration, // Simpan jumlah menit
         ];
 
