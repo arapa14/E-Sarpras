@@ -179,11 +179,11 @@
             function formatStatus(data) {
                 let badgeClass = '';
                 if (data === 'pending') {
-                    badgeClass = 'bg-yellow-100 text-yellow-600';
+                    badgeClass = 'bg-yellow-100 text-yellow-700 border border-yellow-500';
                 } else if (data === 'progress') {
-                    badgeClass = 'bg-blue-100 text-blue-600';
+                    badgeClass = 'bg-blue-100 text-blue-700 border border-blue-500';
                 } else if (data === 'selesai') {
-                    badgeClass = 'bg-green-100 text-green-600';
+                    badgeClass = 'bg-green-100 text-green-700 border border-green-500';
                 }
                 return `<span class="px-3 py-1 ${badgeClass} rounded-full text-xs font-semibold uppercase">${data}</span>`;
             }

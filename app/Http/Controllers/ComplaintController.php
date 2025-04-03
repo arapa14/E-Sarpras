@@ -320,28 +320,27 @@ class ComplaintController extends Controller
                 return Carbon::parse($row->created_at)->format('d M Y H:i');
             })
             ->editColumn('status', function ($row) {
-                // Definisikan opsi dropdown dengan label dan style masing-masing
+                // Definisikan opsi dropdown dengan Tailwind CSS classes
                 $options = [
-                    'pending'  => ['label' => 'Pending',  'bg' => '#fef3c7', 'color' => '#92400e'],
-                    'progress' => ['label' => 'Progress', 'bg' => '#bfdbfe', 'color' => '#1d4ed8'],
-                    'selesai'  => ['label' => 'Selesai',  'bg' => '#bbf7d0', 'color' => '#065f46'],
+                    'pending'  => ['label' => 'Pending',  'class' => 'bg-yellow-100 text-yellow-700 border border-yellow-500'],
+                    'progress' => ['label' => 'Progress', 'class' => 'bg-blue-100 text-blue-700 border border-blue-500'],
+                    'selesai'  => ['label' => 'Selesai',  'class' => 'bg-green-100 text-green-700 border border-green-500'],
                 ];
-
+            
                 // Ambil opsi yang sesuai dengan status saat ini
-                $current = $options[$row->status] ?? ['bg' => '', 'color' => ''];
-                $selectedStyle = "background-color: {$current['bg']}; color: {$current['color']};";
-
-                // Set inline style pada <select> agar tampil sesuai status terpilih saat tidak diklik
-                $html = "<select class='status-dropdown border border-gray-300 rounded p-1' data-id='{$row->id}' style='{$selectedStyle}'>";
+                $currentClass = $options[$row->status]['class'] ?? '';
+            
+                // Buat dropdown dengan class Tailwind, serta data attribute untuk manipulasi via JavaScript
+                $html = "<select class='status-dropdown border border-gray-300 rounded p-1 {$currentClass}' data-id='{$row->id}'>";
                 foreach ($options as $key => $option) {
                     $selected = ($row->status === $key) ? 'selected' : '';
-                    // Sertakan data atribut untuk memudahkan update style via JS
-                    $html .= "<option value='{$key}' data-bg='{$option['bg']}' data-color='{$option['color']}' style='background-color: {$option['bg']}; color: {$option['color']};' {$selected}>{$option['label']}</option>";
+                    // Tambahkan data attribute agar bisa diubah dengan JS
+                    $html .= "<option value='{$key}' data-class='{$option['class']}' class='{$option['class']}' {$selected}>{$option['label']}</option>";
                 }
                 $html .= "</select>";
-
+            
                 return $html;
-            })
+            })            
             ->addColumn('user_name', function ($row) {
                 return $row->user ? $row->user->name : 'N/A';
             })
