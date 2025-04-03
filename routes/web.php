@@ -33,8 +33,7 @@ Route::middleware(['auth', 'isUser'])->group(function () {
     Route::get('/complaint/{complaint}', [ComplaintController::class, 'show'])->name('complaint.detail');
 });
 
-// Route Admin
-Route::middleware(['auth', 'isAdmin'])->group(function () {
+Route::middleware(['auth', 'isAdminOrSuperAdmin'])->group(function () {
     Route::get('/complaint', [ComplaintController::class, 'complaintList'])->name('complaint.list');
     Route::get('/pengaduan/data', [ComplaintController::class, 'getList'])->name('complaint.getList');
     Route::patch('/pengaduan/{complaint}/status', [ComplaintController::class, 'updateStatus'])->name('complaint.updateStatus');
