@@ -114,7 +114,7 @@
                     <!-- Divider untuk $apk -->
                     <div class="w-full border-b border-yellow-500 my-2"></div>
 
-                    @if ($user)
+                    @if (auth()->user()->name)
                         <p class="text-white font-medium mt-2">{{ auth()->user()->name ?? 'User' }}</p>
                         <span class="text-sm text-yellow-300">{{ ucfirst(auth()->user()->role) }}</span>
                         <!-- Divider untuk role -->
@@ -131,15 +131,15 @@
                         </a>
                     </li>
                     <li>
-                        <a href="{{ route('complaint.index') }}"
+                        <a href="{{ route('complaint.list') }}"
                             class="flex items-center p-3 rounded transition-colors duration-300 {{ request()->is('pengaduan') ? 'active' : '' }}">
-                            <i class="fas fa-comment-alt mr-3"></i> Buat Pengaduan
+                            <i class="fas fa-comment-alt mr-3"></i>Pengaduan
                         </a>
                     </li>
                     <li>
-                        <a href="{{ route('complaint.riwayat') }}"
+                        <a href="{{ route('faq.index') }}"
                             class="flex items-center p-3 rounded transition-colors duration-300 {{ request()->is('riwayat') ? 'active' : '' }}">
-                            <i class="fas fa-history mr-3"></i> Riwayat Pengaduan
+                            <i class="fas fa-history mr-3"></i> Frequently Asked Questions (FAQ)
                         </a>
                     </li>
                     <!-- Tombol Logout (untuk mobile) -->
@@ -195,6 +195,7 @@
                 document.getElementById("loadingOverlay").style.display = "none";
             });
         });
+
 
         // Fungsi update waktu real-time
         function updateClock() {

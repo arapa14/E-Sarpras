@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ComplaintController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\FaqController;
 use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\serverController;
 use Illuminate\Support\Facades\Auth;
@@ -30,4 +31,13 @@ Route::middleware(['auth', 'isUser'])->group(function () {
     Route::get('/riwayat', [ComplaintController::class, 'riwayat'])->name('complaint.riwayat');
     Route::get('/riwayat/data', [ComplaintController::class, 'getRiwayat'])->name('complaint.getRiwayat');
     Route::get('/complaint/{complaint}', [ComplaintController::class, 'show'])->name('complaint.detail');
+});
+
+// Route Admin
+Route::middleware(['auth', 'isAdmin'])->group(function () {
+    Route::get('/complaint', [ComplaintController::class, 'complaintList'])->name('complaint.list');
+    Route::get('/pengaduan/data', [ComplaintController::class, 'getList'])->name('complaint.getList');
+    Route::patch('/pengaduan/{complaint}/status', [ComplaintController::class, 'updateStatus'])->name('complaint.updateStatus');
+
+    Route::get('/faq', [FaqController::class, 'index'])->name('faq.index');
 });

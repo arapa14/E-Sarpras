@@ -253,6 +253,10 @@ class ComplaintController extends Controller
 
         return DataTables::of($history)
             ->addIndexColumn()
+            ->editColumn('created_at', function ($row) {
+                // Gunakan Carbon untuk format tanggal, misal: 15 Mar 2025 14:30
+                return Carbon::parse($row->created_at)->format('d M Y H:i');
+            })
             ->editColumn('status', function ($row) {
                 // Sesuaikan badge status berdasarkan nilai status di database
                 $statusClass = match ($row->status) {
@@ -294,6 +298,82 @@ class ComplaintController extends Controller
         $data = compact('user', 'apk', 'logo', 'complaint');
         return view('user.detail', $data);
     }
+
+    // Admin Boundary
+
+
+    public function complaintList()
+    {
+        return view('admin.complaintList');
+    }
+
+
+    public function getList(Request $request)
+    {
+        // Gunakan query builder dengan eager load jika diperlukan (misal: user)
+        $list = Complaint::with('user')->orderBy('created_at', 'desc');
+
+        return DataTables::of($list)
+            ->addIndexColumn()
+            ->editColumn('created_at', function ($row) {
+                // Gunakan Carbon untuk format tanggal, misal: 15 Mar 2025 14:30
+                return Carbon::parse($row->created_at)->format('d M Y H:i');
+            })
+            ->editColumn('status', function ($row) {
+                // Definisikan opsi dropdown dengan label dan style masing-masing
+                $options = [
+                    'pending'  => ['label' => 'Pending',  'bg' => '#fef3c7', 'color' => '#92400e'],
+                    'progress' => ['label' => 'Progress', 'bg' => '#bfdbfe', 'color' => '#1d4ed8'],
+                    'selesai'  => ['label' => 'Selesai',  'bg' => '#bbf7d0', 'color' => '#065f46'],
+                ];
+
+                // Ambil opsi yang sesuai dengan status saat ini
+                $current = $options[$row->status] ?? ['bg' => '', 'color' => ''];
+                $selectedStyle = "background-color: {$current['bg']}; color: {$current['color']};";
+
+                // Set inline style pada <select> agar tampil sesuai status terpilih saat tidak diklik
+                $html = "<select class='status-dropdown border border-gray-300 rounded p-1' data-id='{$row->id}' style='{$selectedStyle}'>";
+                foreach ($options as $key => $option) {
+                    $selected = ($row->status === $key) ? 'selected' : '';
+                    // Sertakan data atribut untuk memudahkan update style via JS
+                    $html .= "<option value='{$key}' data-bg='{$option['bg']}' data-color='{$option['color']}' style='background-color: {$option['bg']}; color: {$option['color']};' {$selected}>{$option['label']}</option>";
+                }
+                $html .= "</select>";
+
+                return $html;
+            })
+            ->addColumn('user_name', function ($row) {
+                return $row->user ? $row->user->name : 'N/A';
+            })
+            ->addColumn('action', function ($row) {
+                // Tombol untuk melihat semua gambar dan detail laporan
+                $images = json_decode($row->before_image, true);
+                $imagesJson = htmlspecialchars(json_encode($images), ENT_QUOTES, 'UTF-8');
+                $buttonImages = '<button class="action-icon btn-view p-2" onclick="openImagesModal(\'' . $imagesJson . '\')" title="Lihat Semua Gambar">
+                                    <i class="fa-solid fa-images"></i>
+                                 </button>';
+                $buttonDetail = '<a href="' . route('complaint.detail', $row->id) . '" class="action-icon btn-detail p-2" title="Lihat Detail">
+                                    <i class="fa-solid fa-eye fa-lg"></i>
+                                 </a>';
+                return '<div class="flex justify-center space-x-2">' . $buttonImages . $buttonDetail . '</div>';
+            })
+            ->rawColumns(['status', 'action'])
+            ->make(true);
+    }
+
+    public function updateStatus(Request $request, Complaint $complaint)
+    {
+        // Validasi status yang diterima
+        $validated = $request->validate([
+            'status' => 'required|in:pending,progress,selesai'
+        ]);
+
+        $complaint->update($validated);
+
+        return response()->json(['message' => 'Status berhasil diperbarui.']);
+    }
+
+
 
     /**
      * Show the form for editing the specified resource.
