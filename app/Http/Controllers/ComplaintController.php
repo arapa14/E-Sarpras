@@ -310,54 +310,57 @@ class ComplaintController extends Controller
 
     public function getList(Request $request)
     {
-        // Gunakan query builder dengan eager load jika diperlukan (misal: user)
-        $list = Complaint::with('user')->orderBy('created_at', 'desc');
+        // Query builder tanpa eager load relasi user
+        $list = Complaint::orderBy('created_at', 'desc');
 
-        return DataTables::of($list)
-            ->addIndexColumn()
-            ->editColumn('created_at', function ($row) {
-                // Gunakan Carbon untuk format tanggal, misal: 15 Mar 2025 14:30
-                return Carbon::parse($row->created_at)->format('d M Y H:i');
-            })
-            ->editColumn('status', function ($row) {
-                // Definisikan opsi dropdown dengan Tailwind CSS classes
-                $options = [
-                    'pending'  => ['label' => 'Pending',  'class' => 'bg-yellow-100 text-yellow-700 border border-yellow-500'],
-                    'progress' => ['label' => 'Progress', 'class' => 'bg-blue-100 text-blue-700 border border-blue-500'],
-                    'selesai'  => ['label' => 'Selesai',  'class' => 'bg-green-100 text-green-700 border border-green-500'],
-                ];
-            
-                // Ambil opsi yang sesuai dengan status saat ini
-                $currentClass = $options[$row->status]['class'] ?? '';
-            
-                // Buat dropdown dengan class Tailwind, serta data attribute untuk manipulasi via JavaScript
-                $html = "<select class='status-dropdown border border-gray-300 rounded p-1 {$currentClass}' data-id='{$row->id}'>";
-                foreach ($options as $key => $option) {
-                    $selected = ($row->status === $key) ? 'selected' : '';
-                    // Tambahkan data attribute agar bisa diubah dengan JS
-                    $html .= "<option value='{$key}' data-class='{$option['class']}' class='{$option['class']}' {$selected}>{$option['label']}</option>";
-                }
-                $html .= "</select>";
-            
-                return $html;
-            })            
-            ->addColumn('user_name', function ($row) {
-                return $row->user ? $row->user->name : 'N/A';
-            })
-            ->addColumn('action', function ($row) {
-                // Tombol untuk melihat semua gambar dan detail laporan
-                $images = json_decode($row->before_image, true);
-                $imagesJson = htmlspecialchars(json_encode($images), ENT_QUOTES, 'UTF-8');
-                $buttonImages = '<button class="action-icon btn-view p-2" onclick="openImagesModal(\'' . $imagesJson . '\')" title="Lihat Semua Gambar">
+        try {
+            return DataTables::of($list)
+                ->addIndexColumn()
+                ->editColumn('created_at', function ($row) {
+                    // Gunakan Carbon untuk format tanggal, misal: 15 Mar 2025 14:30
+                    return Carbon::parse($row->created_at)->format('d M Y H:i');
+                })
+                ->editColumn('status', function ($row) {
+                    // Definisikan opsi dropdown dengan Tailwind CSS classes
+                    $options = [
+                        'pending'  => ['label' => 'Pending',  'class' => 'bg-yellow-100 text-yellow-700 border border-yellow-500'],
+                        'progress' => ['label' => 'Progress', 'class' => 'bg-blue-100 text-blue-700 border border-blue-500'],
+                        'selesai'  => ['label' => 'Selesai',  'class' => 'bg-green-100 text-green-700 border border-green-500'],
+                    ];
+
+                    // Ambil opsi yang sesuai dengan status saat ini
+                    $currentClass = $options[$row->status]['class'] ?? '';
+
+                    // Buat dropdown dengan class Tailwind, serta data attribute untuk manipulasi via JavaScript
+                    $html = "<select class='status-dropdown border border-gray-300 rounded p-1 {$currentClass}' data-id='{$row->id}'>";
+                    foreach ($options as $key => $option) {
+                        $selected = ($row->status === $key) ? 'selected' : '';
+                        $html .= "<option value='{$key}' data-class='{$option['class']}' class='{$option['class']}' {$selected}>{$option['label']}</option>";
+                    }
+                    $html .= "</select>";
+
+                    return $html;
+                })
+                ->addColumn('action', function ($row) {
+                    // Tombol untuk melihat semua gambar dan detail laporan
+                    $images = json_decode($row->before_image, true);
+                    $imagesJson = htmlspecialchars(json_encode($images), ENT_QUOTES, 'UTF-8');
+                    $buttonImages = '<button class="action-icon btn-view p-2" onclick="openImagesModal(\'' . $imagesJson . '\')" title="Lihat Semua Gambar">
                                     <i class="fa-solid fa-images"></i>
                                  </button>';
-                $buttonDetail = '<a href="' . route('complaint.list.detail', $row->id) . '" class="action-icon btn-detail p-2" title="Lihat Detail">
+                    $buttonDetail = '<a href="' . route('complaint.list.detail', $row->id) . '" class="action-icon btn-detail p-2" title="Lihat Detail">
                                     <i class="fa-solid fa-eye fa-lg"></i>
                                  </a>';
-                return '<div class="flex justify-center space-x-2">' . $buttonImages . $buttonDetail . '</div>';
-            })
-            ->rawColumns(['status', 'action'])
-            ->make(true);
+                    return '<div class="flex justify-center space-x-2">' . $buttonImages . $buttonDetail . '</div>';
+                })
+                ->rawColumns(['status', 'action'])
+                ->make(true);
+        } catch (\Exception $e) {
+            // Lakukan log error
+            \Log::error($e);
+            // Mengembalikan respon error
+            return response()->json(['error' => 'Terjadi kesalahan pada server.'], 500);
+        }
     }
 
     public function updateStatus(Request $request, Complaint $complaint)

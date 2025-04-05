@@ -45,4 +45,11 @@ Route::middleware(['auth', 'isAdminOrSuperAdmin'])->group(function () {
     Route::post('/response/{complaint}', [ResponseController::class, 'store'])->name('response.store');
 
     Route::get('/faq', [FaqController::class, 'index'])->name('faq.index');
+
+    Route::get('/question/data', [QuestionController::class, 'getQuestion'])->name('question.getQuestion');
+    Route::get('/faq/data', [FaqController::class, 'getFaq'])->name('faq.getFaq');
+
+     // Halaman untuk menjawab pertanyaan
+     Route::get('/question/{question}/answer', [FaqController::class, 'answer'])->name('faq.answer');
+     Route::post('/question/{question}/answer', [FaqController::class, 'store'])->name('faq.store');
 });
