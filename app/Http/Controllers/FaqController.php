@@ -23,7 +23,9 @@ class FaqController extends Controller
      */
     public function getFaq()
     {
-        $faqs = Faq::orderBy('created_at', 'desc')->get();
+        $faqs = Faq::orderByRaw("FIELD(status, 'published', 'draft')")
+            ->orderBy('created_at', 'asc')
+            ->get();
 
         return DataTables::of($faqs)
             ->addIndexColumn()
@@ -47,11 +49,11 @@ class FaqController extends Controller
             ->addColumn('action', function ($row) {
                 // Tombol untuk edit (buka modal inline) dan delete
                 $btnEdit = '<button type="button" class="action-icon btn-edit p-2" data-id="' . $row->id . '" data-question="' . htmlspecialchars($row->question, ENT_QUOTES) . '" data-answer="' . htmlspecialchars($row->answer, ENT_QUOTES) . '" data-status="' . $row->status . '" title="Edit FAQ">
-                                <i class="fa-solid fa-pen-to-square"></i>
-                            </button>';
+                            <i class="fa-solid fa-pen-to-square"></i>
+                        </button>';
                 $btnDelete = '<button type="button" class="action-icon btn-delete p-2" data-id="' . $row->id . '" title="Delete FAQ">
-                                <i class="fa-solid fa-trash"></i>
-                            </button>';
+                            <i class="fa-solid fa-trash"></i>
+                        </button>';
                 return '<div class="flex justify-center space-x-2">' . $btnEdit . $btnDelete . '</div>';
             })
             ->rawColumns(['status', 'action'])

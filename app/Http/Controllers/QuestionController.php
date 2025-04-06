@@ -48,7 +48,9 @@ class QuestionController extends Controller
 
     public function getQuestion()
     {
-        $questions = Question::orderBy('created_at', 'desc')->get();
+        $questions = Question::orderByRaw("FIELD(status, 'pending', 'approved', 'rejected')")
+            ->orderBy('created_at', 'asc') // waktu terlama di atas
+            ->get();
 
         return DataTables::of($questions)
             ->addIndexColumn()
@@ -73,13 +75,14 @@ class QuestionController extends Controller
             })
             ->addColumn('action', function ($row) {
                 $buttonDetail = '<a href="' . route('faq.answer', $row->id) . '" class="action-icon btn-detail p-2" title="Lihat Detail">
-                                    <i class="fa-solid fa-eye fa-lg"></i>
-                                 </a>';
+                                <i class="fa-solid fa-eye fa-lg"></i>
+                             </a>';
                 return '<div class="flex justify-center space-x-2">' . $buttonDetail . '</div>';
             })
             ->rawColumns(['status', 'action'])
             ->make(true);
     }
+
 
 
     /**

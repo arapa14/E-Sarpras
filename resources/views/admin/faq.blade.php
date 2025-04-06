@@ -55,21 +55,40 @@
         .btn-detail:hover {
             background-color: #1d4ed8;
         }
+
+        .btn-edit {
+            background-color: #f59e0b;
+            color: #ffffff;
+        }
+
+        .btn-edit:hover {
+            background-color: #d97706;
+        }
+
+        .btn-delete {
+            background-color: #ef4444;
+            color: #ffffff;
+        }
+
+        .btn-delete:hover {
+            background-color: #dc2626;
+        }
+
     </style>
 @endsection
 
 @section('content')
-    <div class="max-w-7xl mx-auto p-4 space-y-8">
+    <div class="container mx-auto px-4 py-6 space-y-10">
         <!-- Tabel Pertanyaan -->
-        <div class="bg-white shadow-md rounded-lg">
+        <div class="bg-white shadow-lg rounded-lg overflow-hidden">
             <div class="bg-blue-600 px-6 py-4">
-                <h1 class="text-white text-2xl font-bold">Daftar Pertanyaan</h1>
+                <h1 class="text-white text-xl sm:text-2xl font-bold">Daftar Pertanyaan</h1>
             </div>
             <div class="p-4">
                 <div class="overflow-x-auto">
                     <table id="questions-table" class="min-w-full divide-y divide-gray-200">
                         <thead>
-                            <tr class="bg-gray-200 text-gray-700 uppercase font-semibold text-sm">
+                            <tr class="bg-gray-200 text-gray-700 uppercase font-semibold text-xs sm:text-sm">
                                 <th class="border px-4 py-2 text-center">No</th>
                                 <th class="border px-4 py-2 text-center">Pertanyaan</th>
                                 <th class="border px-4 py-2 text-left">Waktu</th>
@@ -84,26 +103,28 @@
         </div>
 
         <!-- Tabel FAQ -->
-        <div class="bg-white shadow-md rounded-lg">
+        <div class="bg-white shadow-lg rounded-lg overflow-hidden">
             <div class="bg-green-600 px-6 py-4">
-                <h1 class="text-white text-2xl font-bold">Daftar FAQ</h1>
+                <h1 class="text-white text-xl sm:text-2xl font-bold">Daftar FAQ</h1>
             </div>
             <div class="p-4">
-                <div class="flex justify-start mb-4">
-                    <button id="openNewFaqModal" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
+                <div class="flex flex-col sm:flex-row justify-between items-center mb-4">
+                    <h2 class="text-gray-700 text-lg font-medium mb-2 sm:mb-0">Kelola FAQ</h2>
+                    <button id="openNewFaqModal"
+                        class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 focus:outline-none focus:ring">
                         Tambah FAQ
                     </button>
                 </div>
-                <div class="table-responsive">
-                    <table id="faq-table" class="table table-bordered">
+                <div class="overflow-x-auto">
+                    <table id="faq-table" class="min-w-full divide-y divide-gray-200">
                         <thead>
-                            <tr class="text-center">
-                                <th>No</th>
-                                <th>Pertanyaan</th>
-                                <th>Jawaban</th>
-                                <th>Status</th>
-                                <th>Waktu</th>
-                                <th>Aksi</th>
+                            <tr class="bg-gray-200 text-gray-700 uppercase font-semibold text-xs sm:text-sm">
+                                <th class="border px-4 py-2 text-center">No</th>
+                                <th class="border px-4 py-2 text-center">Pertanyaan</th>
+                                <th class="border px-4 py-2 text-center">Jawaban</th>
+                                <th class="border px-4 py-2 text-center">Status</th>
+                                <th class="border px-4 py-2 text-center">Waktu</th>
+                                <th class="border px-4 py-2 text-center">Aksi</th>
                             </tr>
                         </thead>
                         <tbody></tbody>
@@ -118,42 +139,49 @@
         <div class="flex items-center justify-center min-h-screen px-4">
             <!-- Background overlay -->
             <div class="fixed inset-0 transition-opacity" aria-hidden="true">
-                <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
+                <div class="absolute inset-0 bg-gray-900 opacity-50"></div>
             </div>
             <!-- Modal content -->
-            <div
-                class="bg-white rounded-lg overflow-hidden shadow-xl transform transition-all sm:max-w-lg sm:w-full relative">
+            <div class="bg-white rounded-lg shadow-xl transform transition-all sm:max-w-lg w-full relative">
                 <form id="newFaqForm">
                     @csrf
-                    <div class="px-4 py-3 bg-gray-100 flex justify-between items-center">
-                        <h5 class="text-lg font-bold">Tambah FAQ Baru</h5>
+                    <div class="px-4 py-3 bg-gray-100 flex justify-between items-center border-b">
+                        <h5 class="text-lg font-bold text-gray-800">Tambah FAQ Baru</h5>
                         <button type="button" id="closeNewFaqModal"
-                            class="text-gray-700 hover:text-gray-900 text-2xl">&times;</button>
+                            class="text-gray-700 hover:text-gray-900 text-2xl leading-none">&times;</button>
                     </div>
-                    <div class="px-4 py-5">
-                        <div class="mb-4">
-                            <label for="new_faq_question" class="block text-gray-700">Pertanyaan</label>
-                            <textarea class="w-full border rounded px-3 py-2 focus:outline-none focus:ring" id="new_faq_question" name="question"
-                                rows="2" required></textarea>
-                        </div>
-                        <div class="mb-4">
-                            <label for="new_faq_answer" class="block text-gray-700">Jawaban</label>
-                            <textarea class="w-full border rounded px-3 py-2 focus:outline-none focus:ring" id="new_faq_answer" name="answer"
-                                rows="3" required></textarea>
+                    <div class="px-4 py-5 space-y-4">
+                        <div>
+                            <label for="new_faq_question" class="block text-gray-700 mb-1">Pertanyaan</label>
+                            <textarea class="w-full border rounded px-3 py-2 focus:outline-none focus:ring focus:border-blue-300"
+                                id="new_faq_question" name="question" rows="2" required></textarea>
                         </div>
                         <div>
-                            <label for="new_faq_status" class="block text-gray-700">Status</label>
-                            <select class="w-full border rounded px-3 py-2 focus:outline-none focus:ring"
-                                id="new_faq_status" name="status">
-                                <option value="draft">Draft</option>
-                                <option value="published">Published</option>
-                            </select>
+                            <label for="new_faq_answer" class="block text-gray-700 mb-1">Jawaban</label>
+                            <textarea class="w-full border rounded px-3 py-2 focus:outline-none focus:ring focus:border-blue-300"
+                                id="new_faq_answer" name="answer" rows="3" required></textarea>
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 mb-1">Status</label>
+                            <div class="flex items-center space-x-6">
+                                <label class="inline-flex items-center cursor-pointer">
+                                    <input type="radio" name="status" value="draft" class="form-radio text-gray-600"
+                                        required>
+                                    <span class="ml-2 text-gray-700">Draft</span>
+                                </label>
+                                <label class="inline-flex items-center cursor-pointer">
+                                    <input type="radio" name="status" value="published" class="form-radio text-green-600"
+                                        required>
+                                    <span class="ml-2 text-green-700">Published</span>
+                                </label>
+                            </div>
                         </div>
                     </div>
-                    <div class="px-4 py-3 bg-gray-100 flex justify-end">
+                    <div class="px-4 py-3 bg-gray-100 flex justify-end space-x-3 border-t">
                         <button type="button" id="cancelNewFaqModal"
-                            class="bg-gray-500 text-white px-4 py-2 rounded mr-2 hover:bg-gray-600">Batal</button>
-                        <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Simpan
+                            class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 focus:outline-none focus:ring">Batal</button>
+                        <button type="submit"
+                            class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 focus:outline-none focus:ring">Simpan
                             FAQ</button>
                     </div>
                 </form>
@@ -161,50 +189,56 @@
         </div>
     </div>
 
-
     <!-- Modal Edit FAQ -->
     <div id="editFaqModal" class="fixed inset-0 hidden z-50 overflow-y-auto">
         <div class="flex items-center justify-center min-h-screen px-4">
             <!-- Background overlay -->
             <div class="fixed inset-0 transition-opacity" aria-hidden="true">
-                <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
+                <div class="absolute inset-0 bg-gray-900 opacity-50"></div>
             </div>
             <!-- Modal content -->
-            <div
-                class="bg-white rounded-lg overflow-hidden shadow-xl transform transition-all sm:max-w-lg sm:w-full relative">
+            <div class="bg-white rounded-lg shadow-xl transform transition-all sm:max-w-lg w-full relative">
                 <form id="editFaqForm">
                     @csrf
                     @method('PATCH')
-                    <div class="px-4 py-3 bg-gray-100 flex justify-between items-center">
-                        <h5 class="text-lg font-bold">Edit FAQ</h5>
+                    <div class="px-4 py-3 bg-gray-100 flex justify-between items-center border-b">
+                        <h5 class="text-lg font-bold text-gray-800">Edit FAQ</h5>
                         <button type="button" id="closeModal"
-                            class="text-gray-700 hover:text-gray-900 text-2xl">&times;</button>
+                            class="text-gray-700 hover:text-gray-900 text-2xl leading-none">&times;</button>
                     </div>
-                    <div class="px-4 py-5">
+                    <div class="px-4 py-5 space-y-4">
                         <input type="hidden" id="faq_id" name="faq_id">
-                        <div class="mb-4">
-                            <label for="faq_question" class="block text-gray-700">Pertanyaan</label>
-                            <textarea class="w-full border rounded px-3 py-2 focus:outline-none focus:ring" id="faq_question" name="question"
-                                rows="2" required></textarea>
-                        </div>
-                        <div class="mb-4">
-                            <label for="faq_answer" class="block text-gray-700">Jawaban</label>
-                            <textarea class="w-full border rounded px-3 py-2 focus:outline-none focus:ring" id="faq_answer" name="answer"
-                                rows="3" required></textarea>
+                        <div>
+                            <label for="faq_question" class="block text-gray-700 mb-1">Pertanyaan</label>
+                            <textarea class="w-full border rounded px-3 py-2 focus:outline-none focus:ring focus:border-blue-300" id="faq_question"
+                                name="question" rows="2" required></textarea>
                         </div>
                         <div>
-                            <label for="faq_status" class="block text-gray-700">Status</label>
-                            <select class="w-full border rounded px-3 py-2 focus:outline-none focus:ring" id="faq_status"
-                                name="status">
-                                <option value="draft">Draft</option>
-                                <option value="published">Published</option>
-                            </select>
+                            <label for="faq_answer" class="block text-gray-700 mb-1">Jawaban</label>
+                            <textarea class="w-full border rounded px-3 py-2 focus:outline-none focus:ring focus:border-blue-300" id="faq_answer"
+                                name="answer" rows="3" required></textarea>
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 mb-1">Status</label>
+                            <div class="flex items-center space-x-6">
+                                <label class="inline-flex items-center cursor-pointer">
+                                    <input type="radio" name="status" value="draft" class="form-radio text-gray-600"
+                                        required>
+                                    <span class="ml-2 text-gray-700">Draft</span>
+                                </label>
+                                <label class="inline-flex items-center cursor-pointer">
+                                    <input type="radio" name="status" value="published"
+                                        class="form-radio text-green-600" required>
+                                    <span class="ml-2 text-green-700">Published</span>
+                                </label>
+                            </div>
                         </div>
                     </div>
-                    <div class="px-4 py-3 bg-gray-100 flex justify-end">
+                    <div class="px-4 py-3 bg-gray-100 flex justify-end space-x-3 border-t">
                         <button type="button" id="cancelModal"
-                            class="bg-gray-500 text-white px-4 py-2 rounded mr-2 hover:bg-gray-600">Batal</button>
-                        <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Simpan
+                            class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 focus:outline-none focus:ring">Batal</button>
+                        <button type="submit"
+                            class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 focus:outline-none focus:ring">Simpan
                             Perubahan</button>
                     </div>
                 </form>
@@ -314,9 +348,8 @@
             $('#newFaqForm').on('submit', function(e) {
                 e.preventDefault();
                 var formData = $(this).serialize();
-
                 $.ajax({
-                    url: '/faq', // Pastikan route POST untuk menyimpan FAQ baru sudah disediakan
+                    url: '/faq',
                     type: 'POST',
                     data: formData,
                     headers: {
@@ -325,9 +358,7 @@
                     success: function(response) {
                         $("#newFaqModal").addClass("hidden");
                         toastr.success(response.message);
-                        // Reload DataTable FAQ untuk menampilkan data terbaru
                         $('#faq-table').DataTable().ajax.reload(null, false);
-                        // Reset form input
                         $('#newFaqForm')[0].reset();
                     },
                     error: function(xhr) {
@@ -341,9 +372,8 @@
                 var faqId = $(this).data('id');
                 var status = $(this).val();
                 var dropdown = $(this);
-
                 $.ajax({
-                    url: '/faq/' + faqId + '/status', // pastikan route ini sesuai
+                    url: '/faq/' + faqId + '/status',
                     type: 'PATCH',
                     data: {
                         status: status
@@ -370,7 +400,7 @@
                 var faqId = $(this).data('id');
                 if (confirm('Apakah Anda yakin akan menghapus FAQ ini?')) {
                     $.ajax({
-                        url: '/faq/' + faqId, // pastikan route DELETE ini sesuai
+                        url: '/faq/' + faqId,
                         type: 'DELETE',
                         headers: {
                             'X-CSRF-TOKEN': '{{ csrf_token() }}'
@@ -392,7 +422,6 @@
                 var question = $(this).data('question');
                 var answer = $(this).data('answer');
                 var status = $(this).data('status');
-
                 $('#faq_id').val(faqId);
                 $('#faq_question').val(question);
                 $('#faq_answer').val(answer);
@@ -410,9 +439,8 @@
                 e.preventDefault();
                 var faqId = $('#faq_id').val();
                 var formData = $(this).serialize();
-
                 $.ajax({
-                    url: '/faq/' + faqId, // pastikan route PATCH update FAQ ini sesuai
+                    url: '/faq/' + faqId,
                     type: 'PATCH',
                     data: formData,
                     success: function(response) {
