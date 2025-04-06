@@ -78,46 +78,28 @@
             </div>
         </header>
 
-        <!-- Header untuk Desktop -->
-        <header class="bg-white shadow flex justify-between items-center p-4 hidden sm:flex">
-            <div class="flex items-center gap-4">
-                <img src="{{ asset($logo ?? 'default-logo.png') }}" alt="Logo"
-                    class="w-12 h-12 object-cover rounded-full border border-gray-200 shadow-md">
-                <h1 class="text-2xl font-bold text-blue-700">Selamat datang, {{ auth()->user()->name ?? 'User' }}</h1>
-            </div>
-            <div class="flex items-center gap-4">
-                <form action="{{ route('logout') }}" method="POST">
-                    @csrf
-                    <button type="submit" class="flex items-center text-red-600 hover:text-red-800 transition-colors">
-                        <i class="fas fa-sign-out-alt fa-lg mr-1"></i>
-                        <span>Logout</span>
-                    </button>
-                </form>
-            </div>
-        </header>
+        <!-- Catatan: Header untuk desktop dihilangkan sesuai instruksi -->
 
         <!-- Kontainer utama -->
         <div class="flex flex-1 relative pt-16 sm:pt-0">
             <!-- Sidebar -->
             <nav id="sidebar"
-                class="sidebar p-4 w-64 fixed inset-y-0 left-0 z-100 transform -translate-x-full transition-transform duration-300 z-20 sm:relative sm:translate-x-0">
-                <!-- Logo & Nama Aplikasi (hanya untuk mobile) -->
-
-                <div class="sm:hidden flex flex-col items-center pb-2 mb-4">
+                class="sidebar p-4 w-64 fixed inset-y-0 left-0 z-[60] transform -translate-x-full transition-transform duration-300 sm:relative sm:translate-x-0">
+                <!-- Logo, Nama & Role (ditampilkan untuk semua perangkat) -->
+                <div class="flex flex-col items-center pb-2 mb-4">
                     <div class="w-16 h-16 mb-2">
-                        <img src="{{ asset($logo) }}" alt="{{ $apk }}"
+                        <img src="{{ asset($logo ?? 'default-logo.png') }}" alt="{{ $apk }}"
                             class="w-full h-full object-cover rounded-full border-2 border-white shadow-lg transform hover:scale-110 transition duration-300">
                     </div>
                     <h2 class="logo text-xl font-semibold tracking-wide text-yellow-400 drop-shadow">
                         {{ $apk }}
                     </h2>
-                    <!-- Divider untuk $apk -->
+                    <!-- Divider -->
                     <div class="w-full border-b border-yellow-500 my-2"></div>
-
                     @if ($user)
                         <p class="text-white font-medium mt-2">{{ auth()->user()->name ?? 'User' }}</p>
                         <span class="text-sm text-yellow-300">{{ ucfirst(auth()->user()->role) }}</span>
-                        <!-- Divider untuk role -->
+                        <!-- Divider -->
                         <div class="w-full border-b pt-2 border-yellow-500 my-2"></div>
                     @endif
                 </div>
@@ -158,17 +140,13 @@
             <!-- Overlay untuk Sidebar pada tampilan mobile -->
             <div id="sidebarOverlay" class="fixed inset-0 bg-black opacity-50 hidden z-10 sm:hidden"></div>
 
-            <!-- Konten Utama -->
+            <!-- Konten Utama (geser ke kanan di desktop agar tidak tertutup sidebar) -->
             <main class="flex-1 p-6 ml-0 mt-5 pb-15 transition-all duration-300">
                 @yield('content')
             </main>
         </div>
 
-        <!-- Footer Fixed -->
-        <footer
-            class="fixed bottom-0 inset-x-0 bg-gradient-to-r from-blue-600 to-blue-800 text-white text-center p-4 z-50">
-            <p>&copy; {{ date('Y') }} SMKN 1 Jakarta. All rights reserved.</p>
-        </footer>
+        <!-- Catatan: Footer dihilangkan untuk mobile dan desktop sesuai instruksi -->
     </div>
 
     <!-- Script -->
