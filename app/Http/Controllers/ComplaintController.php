@@ -310,12 +310,16 @@ class ComplaintController extends Controller
 
     public function getList(Request $request)
     {
-        // Query builder tanpa eager load relasi user
-        $list = Complaint::orderBy('created_at', 'desc');
+        // Menggunakan eager load relasi user agar dapat mengakses properti user.name
+        $list = Complaint::with('user')->orderBy('created_at', 'desc');
 
         try {
             return DataTables::of($list)
                 ->addIndexColumn()
+                // Menambahkan kolom user_name berdasarkan relasi user
+                ->addColumn('user_name', function ($row) {
+                    return $row->user->name ?? 'N/A';
+                })
                 ->editColumn('created_at', function ($row) {
                     // Gunakan Carbon untuk format tanggal, misal: 15 Mar 2025 14:30
                     return Carbon::parse($row->created_at)->format('d M Y H:i');
@@ -362,6 +366,7 @@ class ComplaintController extends Controller
             return response()->json(['error' => 'Terjadi kesalahan pada server.'], 500);
         }
     }
+
 
     public function updateStatus(Request $request, Complaint $complaint)
     {

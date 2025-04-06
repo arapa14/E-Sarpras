@@ -132,13 +132,13 @@
                     </li>
                     <li>
                         <a href="{{ route('complaint.list') }}"
-                            class="flex items-center p-3 rounded transition-colors duration-300 {{ request()->is('pengaduan') ? 'active' : '' }}">
+                            class="flex items-center p-3 rounded transition-colors duration-300 {{ request()->is('complaint') ? 'active' : '' }}">
                             <i class="fas fa-comment-alt mr-3"></i>Pengaduan
                         </a>
                     </li>
                     <li>
                         <a href="{{ route('faq.index') }}"
-                            class="flex items-center p-3 rounded transition-colors duration-300 {{ request()->is('riwayat') ? 'active' : '' }}">
+                            class="flex items-center p-3 rounded transition-colors duration-300 {{ request()->is('faq') ? 'active' : '' }}">
                             <i class="fas fa-history mr-3"></i> Frequently Asked Questions (FAQ)
                         </a>
                     </li>
