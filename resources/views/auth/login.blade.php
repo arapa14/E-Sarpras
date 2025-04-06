@@ -46,6 +46,19 @@
 </head>
 
 <body class="bg-gradient-to-r from-blue-100 to-blue-50 font-sans">
+    <!-- Back Button Floating -->
+    <div class="fixed top-4 left-4 z-50">
+        <a href="/"
+            class="flex items-center space-x-2 bg-white shadow-md px-3 py-2 rounded-full hover:bg-gray-100 transition">
+            <!-- Icon panah kiri -->
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blue-600" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+            </svg>
+            <span class="text-blue-600 font-medium">Kembali</span>
+        </a>
+    </div>
+
     <!-- Overlay Spinner -->
     <div id="loadingOverlay">
         <div class="spinner">
@@ -71,7 +84,7 @@
             <!-- Form Panel -->
             <div class="flex flex-col p-6 sm:p-8 md:p-12 w-full md:w-1/2 form-container">
                 <!-- Tabs Header -->
-                <div class="flex justify-center md:justify-start mb-8" role="tablist">
+                <div class="flex justify-center mb-8" role="tablist">
                     <button id="loginTab" role="tab" aria-selected="true" aria-controls="loginForm"
                         class="px-6 py-2 text-lg font-semibold border-b-4 transition-colors duration-300 focus:outline-none tab-active">
                         Login
@@ -80,10 +93,6 @@
                         class="px-6 py-2 text-lg font-semibold border-b-4 transition-colors duration-300 focus:outline-none tab-inactive">
                         Register
                     </button>
-                    <a href="/" role="tab" aria-selected="false"
-                        class="px-6 py-2 text-lg font-semibold border-b-4 transition-colors duration-300 focus:outline-none tab-inactive">
-                        Kembali
-                    </a>
                 </div>
                 <!-- Form Content -->
                 <div class="space-y-6">
@@ -101,10 +110,25 @@
                         </div>
                         <div>
                             <label for="login_password" class="block text-gray-700 font-medium mb-2">Kata Sandi</label>
-                            <input type="password" name="password" id="login_password" placeholder="Masukkan kata sandi"
-                                required
-                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                aria-describedby="passwordError" oninput="validatePassword(this)" />
+                            <!-- Container untuk input password dan ikon toggle -->
+                            <div class="relative">
+                                <input type="password" name="password" id="login_password"
+                                    placeholder="Masukkan kata sandi" required
+                                    class="w-full px-4 py-3 pr-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    aria-describedby="passwordError" oninput="validatePassword(this)" />
+                                <button type="button" onclick="togglePassword('login_password', this)"
+                                    class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-600">
+                                    <!-- Default: Icon mata (password hidden) -->
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
+                                        viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                    </svg>
+                                </button>
+                            </div>
+                            <p id="passwordError" class="text-red-500 text-xs mt-1 hidden">Kata sandi tidak valid.</p>
                         </div>
                         <button type="submit"
                             class="w-full py-3 bg-blue-600 rounded-lg text-white font-semibold hover:bg-blue-700 transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500">
@@ -119,13 +143,13 @@
                         <div>
                             <label for="register_name" class="block text-gray-700 font-medium mb-2">Nama</label>
                             <input type="text" name="name" id="register_name"
-                                placeholder="Masukkan nama lengkap anda" required value="{{ old('name') }}"
+                                placeholder="alg" required value="{{ old('name') }}"
                                 class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
                         </div>
                         <div>
                             <label for="register_email" class="block text-gray-700 font-medium mb-2">Email</label>
-                            <input type="email" name="email" id="register_email" placeholder="Masukkan email anda"
-                                required value="{{ old('email') }}"
+                            <input type="email" name="email" id="register_email"
+                                placeholder="smkn1jakarta@gmail.com" required value="{{ old('email') }}"
                                 class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                                 oninput="validateRegisterEmail(this)" />
                             <p id="registerEmailError" class="text-red-500 text-xs mt-1 hidden">Format email tidak
@@ -147,20 +171,45 @@
                         <div>
                             <label for="register_password" class="block text-gray-700 font-medium mb-2">Kata
                                 Sandi</label>
-                            <input type="password" name="password" id="register_password"
-                                placeholder="Masukkan kata sandi" required
-                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                oninput="validateRegisterPassword(this)" />
+                            <div class="relative">
+                                <input type="password" name="password" id="register_password"
+                                    placeholder="Masukkan kata sandi" required
+                                    class="w-full px-4 py-3 pr-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    oninput="validateRegisterPassword(this)" />
+                                <button type="button" onclick="togglePassword('register_password', this)"
+                                    class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-600">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
+                                        viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                    </svg>
+                                </button>
+                            </div>
                             <p id="registerPasswordError" class="text-red-500 text-xs mt-1 hidden">Password harus
                                 minimal 8 karakter.</p>
                         </div>
                         <div>
                             <label for="register_password_confirmation"
                                 class="block text-gray-700 font-medium mb-2">Konfirmasi Kata Sandi</label>
-                            <input type="password" name="password_confirmation" id="register_password_confirmation"
-                                placeholder="Konfirmasi kata sandi" required
-                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                oninput="validatePasswordConfirmation(this)" />
+                            <div class="relative">
+                                <input type="password" name="password_confirmation"
+                                    id="register_password_confirmation" placeholder="Konfirmasi kata sandi" required
+                                    class="w-full px-4 py-3 pr-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    oninput="validatePasswordConfirmation(this)" />
+                                <button type="button"
+                                    onclick="togglePassword('register_password_confirmation', this)"
+                                    class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-600">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
+                                        viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                    </svg>
+                                </button>
+                            </div>
                             <p id="registerPasswordConfirmationError" class="text-red-500 text-xs mt-1 hidden">
                                 Konfirmasi password tidak sesuai.</p>
                         </div>
@@ -170,7 +219,7 @@
                         </button>
                     </form>
                 </div>
-                <!-- Link untuk switch form -->
+                <!-- Link untuk switch form (contoh link reset password) -->
                 <div class="mt-2 text-center">
                     <p id="switchText" class="text-gray-600 text-sm">
                         Lupa password?
@@ -184,6 +233,34 @@
     </div>
 
     <script>
+        // Fungsi toggle untuk mengubah tipe input password dan mengganti ikon
+        function togglePassword(inputId, btn) {
+            const input = document.getElementById(inputId);
+            if (input.type === "password") {
+                input.type = "text";
+                // Ubah ikon menjadi 'eye-off'
+                btn.innerHTML = `
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+               stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M13.875 18.825A10.05 10.05 0 0112 19c-4.477 0-8.268-2.943-9.542-7a10.05 10.05 0 012.66-4.252M6.18 6.18A9.956 9.956 0 0112 5c4.477 0 8.268 2.943 9.542 7a10.05 10.05 0 01-4.293 5.423" />
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M3 3l18 18" />
+          </svg>`;
+            } else {
+                input.type = "password";
+                // Kembalikan ikon 'eye'
+                btn.innerHTML = `
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+               stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+          </svg>`;
+            }
+        }
+
         // Fungsi untuk menampilkan spinner
         function showSpinner() {
             document.getElementById('loadingOverlay').style.display = 'block';
@@ -290,22 +367,15 @@
             showLogin();
         @endif
 
-        // Navigasi antar field saat tekan Enter
+        // Navigasi antar field saat tekan Enter:
+        // Jika bukan field terakhir, pindahkan fokus. Jika sudah field terakhir, biarkan submit berjalan.
         document.querySelectorAll("form").forEach(function(form) {
-            const inputs = Array.from(form.querySelectorAll("input")).filter(
-                (input) => input.type !== "hidden"
-            );
-
+            const inputs = Array.from(form.querySelectorAll("input")).filter(input => input.type !== "hidden");
             inputs.forEach((input, index) => {
                 input.addEventListener("keydown", function(e) {
-                    if (e.key === "Enter") {
-                        e.preventDefault(); // Mencegah submit default
-                        if (index < inputs.length - 1) {
-                            inputs[index + 1].focus(); // Pindah ke input berikutnya
-                        }
-                        // } else {
-                        //     form.submit(); 
-                        // }
+                    if (e.key === "Enter" && index < inputs.length - 1) {
+                        e.preventDefault();
+                        inputs[index + 1].focus();
                     }
                 });
             });
@@ -318,11 +388,6 @@
 
     <!-- Tempatkan script di akhir body -->
     <script>
-        // Fungsi untuk menampilkan spinner
-        function showSpinner() {
-            document.getElementById('loadingOverlay').style.display = 'block';
-        }
-
         // Fungsi validasi untuk form register
         function validateRegisterForm() {
             let username = document.getElementById("register_name").value.trim();
@@ -356,10 +421,10 @@
         }
 
         document.getElementById("registerForm").addEventListener("submit", function(event) {
-            event.preventDefault(); // Cegah submit default
+            event.preventDefault();
             if (validateRegisterForm()) {
-                showSpinner(); // Tampilkan spinner jika validasi berhasil
-                this.submit(); // Submit langsung tanpa delay
+                showSpinner();
+                this.submit();
             }
         });
 
@@ -372,16 +437,14 @@
                 return;
             }
             showSpinner();
-            this.submit(); // Submit langsung tanpa delay
+            this.submit();
         });
 
-
-        // Pastikan kode di atas dijalankan setelah DOM siap
+        // Pastikan kode dijalankan setelah DOM siap
         document.addEventListener("DOMContentLoaded", function() {
-            // Kode di atas sudah terpasang di sini atau pastikan dipanggil setelah DOM terload.
+            // Kode sudah terpasang
         });
     </script>
-
 
     <script>
         @if (session('success'))
