@@ -59,10 +59,38 @@
         #scrollTopBtn:hover {
             background-color: #1d4ed8;
         }
+
+        /* Animasi untuk spinner */
+        #loadingOverlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 999;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        #loadingOverlay .spinner {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
     </style>
 </head>
 
 <body class="bg-gray-50 text-gray-800 antialiased transition-colors duration-300">
+    <!-- Overlay Spinner -->
+    <div id="loadingOverlay">
+        <div class="spinner">
+            <svg class="animate-spin h-12 w-12 text-white" xmlns="http://www.w3.org/2000/svg" fill="none"
+                viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4">
+                </circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+            </svg>
+        </div>
+    </div>
+
     <!-- Navbar -->
     <header x-data="{ open: false }" class="sticky top-0 z-50 backdrop-blur-md shadow"
         style="background-color: rgba(255, 255, 255, 0.7);">
@@ -135,8 +163,10 @@
                 <!-- Feature 1 -->
                 <div
                     class="flex flex-col items-center text-center p-6 rounded-2xl shadow-lg hover:shadow-2xl transition transform hover:scale-105">
-                    <svg class="w-16 h-16 text-blue-600 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4"></path>
+                    <svg class="w-16 h-16 text-blue-600 mb-4" fill="none" stroke="currentColor"
+                        viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4">
+                        </path>
                     </svg>
                     <h3 class="text-2xl font-semibold mb-2">Mudah Digunakan</h3>
                     <p class="text-gray-600">Antarmuka yang intuitif memudahkan setiap pengguna untuk mengakses
@@ -242,7 +272,9 @@
                 @if (session('error'))
                     <div class="bg-red-100 text-red-800 p-4 rounded mb-6">{{ session('error') }}</div>
                 @endif
-                <form action="{{ route('question.store') }}" method="POST">
+                <!-- Tambahkan validasi onsubmit -->
+                <form action="{{ route('question.store') }}" method="POST"
+                    onsubmit="return validateAndSubmitQuestionForm()">
                     @csrf
                     <div class="mb-6">
                         <label for="question" class="block text-xl font-medium mb-2">Pertanyaan Anda</label>
@@ -251,8 +283,9 @@
                             placeholder="Tulis pertanyaan Anda di sini..."></textarea>
                     </div>
                     <button type="submit"
-                        class="w-full px-6 py-4 bg-blue-600 text-white font-semibold rounded-full shadow-lg hover:bg-blue-700 transition">Kirim
-                        Pertanyaan</button>
+                        class="w-full px-6 py-4 bg-blue-600 text-white font-semibold rounded-full shadow-lg hover:bg-blue-700 transition">
+                        Kirim Pertanyaan
+                    </button>
                 </form>
             </div>
         </div>
@@ -347,6 +380,22 @@
             document.getElementById('scrollTopBtn').style.display = (document.body.scrollTop > 200 || document
                 .documentElement.scrollTop > 200) ? 'block' : 'none';
         };
+
+        // Fungsi menampilkan spinner
+        function showSpinner() {
+            document.getElementById('loadingOverlay').style.display = 'block';
+        }
+
+        // Fungsi validasi sebelum submit form pertanyaan
+        function validateAndSubmitQuestionForm() {
+            var question = document.getElementById("question").value.trim();
+            if (question === "") {
+                toastr.error("Tulis pertanyaan terlebih dahulu");
+                return false; // Batalkan submit form
+            }
+            showSpinner(); // Tampilkan loading spinner jika valid
+            return true;
+        }
     </script>
 </body>
 
