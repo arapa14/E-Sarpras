@@ -311,7 +311,9 @@ class ComplaintController extends Controller
     public function getList(Request $request)
     {
         // Menggunakan eager load relasi user agar dapat mengakses properti user.name
-        $list = Complaint::with('user')->orderBy('created_at', 'desc');
+        $list = Complaint::with('user')
+            ->orderByRaw("FIELD(status, 'pending', 'progress', 'selesai')")
+            ->orderBy('created_at', 'asc');
 
         try {
             return DataTables::of($list)
@@ -325,25 +327,15 @@ class ComplaintController extends Controller
                     return Carbon::parse($row->created_at)->format('d M Y H:i');
                 })
                 ->editColumn('status', function ($row) {
-                    // Definisikan opsi dropdown dengan Tailwind CSS classes
                     $options = [
                         'pending'  => ['label' => 'Pending',  'class' => 'bg-yellow-100 text-yellow-700 border border-yellow-500'],
                         'progress' => ['label' => 'Progress', 'class' => 'bg-blue-100 text-blue-700 border border-blue-500'],
                         'selesai'  => ['label' => 'Selesai',  'class' => 'bg-green-100 text-green-700 border border-green-500'],
                     ];
-
-                    // Ambil opsi yang sesuai dengan status saat ini
-                    $currentClass = $options[$row->status]['class'] ?? '';
-
-                    // Buat dropdown dengan class Tailwind, serta data attribute untuk manipulasi via JavaScript
-                    $html = "<select class='status-dropdown border border-gray-300 rounded p-1 {$currentClass}' data-id='{$row->id}'>";
-                    foreach ($options as $key => $option) {
-                        $selected = ($row->status === $key) ? 'selected' : '';
-                        $html .= "<option value='{$key}' data-class='{$option['class']}' class='{$option['class']}' {$selected}>{$option['label']}</option>";
-                    }
-                    $html .= "</select>";
-
-                    return $html;
+                    $status = $row->status;
+                    $label = $options[$status]['label'] ?? ucfirst($status);
+                    $class = $options[$status]['class'] ?? '';
+                    return "<span class='px-3 py-1 {$class} rounded-full text-xs font-semibold uppercase'>{$label}</span>";
                 })
                 ->addColumn('action', function ($row) {
                     // Tombol untuk melihat semua gambar dan detail laporan
@@ -368,17 +360,17 @@ class ComplaintController extends Controller
     }
 
 
-    public function updateStatus(Request $request, Complaint $complaint)
-    {
-        // Validasi status yang diterima
-        $validated = $request->validate([
-            'status' => 'required|in:pending,progress,selesai'
-        ]);
+    // public function updateStatus(Request $request, Complaint $complaint)
+    // {
+    //     // Validasi status yang diterima
+    //     $validated = $request->validate([
+    //         'status' => 'required|in:pending,progress,selesai'
+    //     ]);
 
-        $complaint->update($validated);
+    //     $complaint->update($validated);
 
-        return response()->json(['message' => 'Status berhasil diperbarui.']);
-    }
+    //     return response()->json(['message' => 'Status berhasil diperbarui.']);
+    // }
 
     public function detail(Complaint $complaint)
     {

@@ -85,7 +85,7 @@
         <div class="bg-white shadow-md rounded-lg">
             <!-- Header Judul -->
             <div class="bg-blue-600 px-6 py-4">
-                <h1 class="text-white text-2xl font-bold">Daftar Report</h1>
+                <h1 class="text-white text-2xl font-bold">Riwayat Pengaduan</h1>
             </div>
             <!-- Konten Tabel: Hanya table yang mengizinkan scroll horizontal -->
             <div class="p-4">

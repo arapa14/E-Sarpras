@@ -38,7 +38,6 @@ Route::middleware(['auth', 'isAdminOrSuperAdmin'])->group(function () {
     // Pengaduan
     Route::get('/complaint', [ComplaintController::class, 'complaintList'])->name('complaint.list');
     Route::get('/pengaduan/data', [ComplaintController::class, 'getList'])->name('complaint.getList');
-    Route::patch('/pengaduan/{complaint}/status', [ComplaintController::class, 'updateStatus'])->name('complaint.updateStatus');
     Route::get('/complaint/detail/{complaint}', [ComplaintController::class, 'detail'])->name('complaint.list.detail');
     Route::post('/response/{complaint}', [ResponseController::class, 'store'])->name('response.store');
 
