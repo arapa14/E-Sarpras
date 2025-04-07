@@ -124,6 +124,28 @@
                             <i class="fas fa-history mr-3"></i> Frequently Asked Questions (FAQ)
                         </a>
                     </li>
+
+                    @if (auth()->user()->role == 'superAdmin')
+                        <li>
+                            <a href="{{ route('user.index') }}"
+                                class="flex items-center p-3 rounded transition-colors duration-300 {{ request()->is('user') ? 'active' : '' }}">
+                                <i class="fas fa-users mr-3"></i> Pengguna
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ route('location.index') }}"
+                                class="flex items-center p-3 rounded transition-colors duration-300 {{ request()->is('location') ? 'active' : '' }}">
+                                <i class="fas fa-map-marker-alt mr-3"></i> Lokasi
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ route('setting.index') }}"
+                                class="flex items-center p-3 rounded transition-colors duration-300 {{ request()->is('setting') ? 'active' : '' }}">
+                                <i class="fas fa-cogs mr-3"></i> Pengaturan
+                            </a>
+                        </li>,
+                    @endif
+
                     <!-- Tombol Logout khusus untuk Mobile -->
                     <li>
                         <form action="{{ route('logout') }}" method="POST">

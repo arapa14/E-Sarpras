@@ -12,7 +12,7 @@ class LocationController extends Controller
      */
     public function index()
     {
-        //
+        return view('superadmin.location');
     }
 
     /**
@@ -60,6 +60,6 @@ class LocationController extends Controller
      */
     public function destroy(Location $location)
     {
-        //
+
     }
 }

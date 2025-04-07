@@ -4,9 +4,12 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ComplaintController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\FaqController;
+use App\Http\Controllers\LocationController;
 use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\ResponseController;
 use App\Http\Controllers\serverController;
+use App\Http\Controllers\SettingController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -57,4 +60,15 @@ Route::middleware(['auth', 'isAdminOrSuperAdmin'])->group(function () {
     Route::get('/question/data', [QuestionController::class, 'getQuestion'])->name('question.getQuestion');
     Route::get('/question/{question}/answer', [FaqController::class, 'answer'])->name('faq.answer');
     Route::post('/question/{question}/answer', [FaqController::class, 'store'])->name('faq.store');
+});
+
+Route::middleware(['auth', 'isSuperAdmin'])->group(function () {
+    // CRUD User
+    Route::get('/user', [UserController::class, 'index'])->name('user.index');
+
+    // CRUD Lokasi
+    Route::get('/location', [LocationController::class, 'index'])->name('location.index');
+
+    // CRUD Setting
+    Route::get('/setting', [SettingController::class, 'index'])->name('setting.index');
 });
