@@ -149,6 +149,23 @@
         <!-- Catatan: Footer dihilangkan untuk mobile dan desktop sesuai instruksi -->
     </div>
 
+    @if (session()->has('original_user_id'))
+        <div id="impersonationBanner"
+            class="fixed top-4 right-4 z-50 bg-white opacity-70 border border-gray-300 rounded-lg shadow-lg p-4 max-w-xs">
+            <div class="flex items-center justify-between">
+                <h5 class="text-sm font-bold text-gray-800">Impersonasi Aktif</h5>
+                <a href="{{ route('user.switch.back') }}"
+                    class="text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-700 rounded px-2 py-1">
+                    Kembali
+                </a>
+            </div>
+            <p class="mt-2 text-xs text-gray-700">
+                Anda sedang login sebagai <strong>{{ auth()->user()->name }}</strong>
+                (<em>{{ auth()->user()->email }}</em>).
+            </p>
+        </div>
+    @endif
+
     <!-- Script -->
     <script>
         // Fungsi menampilkan spinner
