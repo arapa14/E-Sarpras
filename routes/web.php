@@ -72,9 +72,12 @@ Route::middleware(['auth', 'isSuperAdmin'])->group(function () {
     Route::delete('/user/{user}', [UserController::class, 'destroy']);
     Route::post('/switch/{id}', [UserController::class, 'switchAccount'])->name('user.switch');
 
-
-    // CRUD Lokasi
+    // CRUD Location
     Route::get('/location', [LocationController::class, 'index'])->name('location.index');
+    Route::get('/location/getLocation', [LocationController::class, 'getLocation'])->name('location.getLocation');
+    Route::post('/location', [LocationController::class, 'store']);
+    Route::patch('/location/{location}', [LocationController::class, 'update']);
+    Route::delete('/location/{location}', [LocationController::class, 'destroy']);
 
     // CRUD Setting
     Route::get('/setting', [SettingController::class, 'index'])->name('setting.index');
