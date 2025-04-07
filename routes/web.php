@@ -81,4 +81,5 @@ Route::middleware(['auth', 'isSuperAdmin'])->group(function () {
 
     // CRUD Setting
     Route::get('/setting', [SettingController::class, 'index'])->name('setting.index');
+    Route::patch('/setting/update', [SettingController::class, 'update'])->name('setting.update');
 });
