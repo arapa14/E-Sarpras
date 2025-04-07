@@ -68,7 +68,7 @@
 
     <div class="min-h-screen flex flex-col">
         <!-- Header khusus untuk Mobile (fixed dan transparan) -->
-        <header class="fixed top-0 inset-x-0 z-50 bg-gradient-to-r from-blue-600 to-blue-800 shadow-md p-4 sm:hidden">
+        <header class="fixed top-0 inset-x-0 z-40 bg-gradient-to-r from-blue-600 to-blue-800 shadow-md p-4 sm:hidden">
             <div class="flex items-center justify-between">
                 <button id="sidebarToggle" class="text-white focus:outline-none">
                     <i class="fas fa-bars fa-2x"></i>
@@ -84,7 +84,7 @@
         <div class="flex flex-1 relative pt-16 sm:pt-0">
             <!-- Sidebar (selalu tampil logo, nama & role) -->
             <nav id="sidebar"
-                class="sidebar p-4 w-64 fixed inset-y-0 left-0 z-[60] transform -translate-x-full transition-transform duration-300 sm:relative sm:translate-x-0 sm:sticky sm:top-0 h-screen overflow-y-auto bg-gray-800">
+                class="sidebar p-4 w-64 fixed inset-y-0 left-0 z-[30] transform -translate-x-full transition-transform duration-300 sm:relative sm:translate-x-0 sm:sticky sm:top-0 h-screen overflow-y-auto bg-gray-800">
                 <!-- Logo, Nama Aplikasi & Role (selalu tampil) -->
                 <div class="flex flex-col items-center pb-2 mb-4">
                     <div class="w-16 h-16 mb-2">

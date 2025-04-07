@@ -24,6 +24,7 @@ Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard
 
 // API
 Route::get('/server-time', [serverController::class, 'getServerTime']);
+Route::get('/switch-back', [UserController::class, 'switchBack'])->name('user.switch.back');
 
 // Route Landing
 Route::post('/question', [QuestionController::class, 'store'])->name('question.store');
@@ -65,6 +66,12 @@ Route::middleware(['auth', 'isAdminOrSuperAdmin'])->group(function () {
 Route::middleware(['auth', 'isSuperAdmin'])->group(function () {
     // CRUD User
     Route::get('/user', [UserController::class, 'index'])->name('user.index');
+    Route::get('/user/getUser', [UserController::class, 'getUser'])->name('user.getUser');
+    Route::post('/user', [UserController::class, 'store']);
+    Route::patch('/user/{user}', [UserController::class, 'update']);
+    Route::delete('/user/{user}', [UserController::class, 'destroy']);
+    Route::post('/switch/{id}', [UserController::class, 'switchAccount'])->name('user.switch');
+
 
     // CRUD Lokasi
     Route::get('/location', [LocationController::class, 'index'])->name('location.index');
