@@ -84,7 +84,7 @@
         <div class="flex flex-1 relative pt-16 sm:pt-0">
             <!-- Sidebar (selalu tampil logo, nama & role) -->
             <nav id="sidebar"
-                class="sidebar p-4 w-64 fixed inset-y-0 left-0 z-[60] transform -translate-x-full transition-transform duration-300 sm:relative sm:translate-x-0">
+                class="sidebar p-4 w-64 fixed inset-y-0 left-0 z-[60] transform -translate-x-full transition-transform duration-300 sm:relative sm:translate-x-0 sm:sticky sm:top-0 h-screen overflow-y-auto bg-gray-800">
                 <!-- Logo, Nama Aplikasi & Role (selalu tampil) -->
                 <div class="flex flex-col items-center pb-2 mb-4">
                     <div class="w-16 h-16 mb-2">
@@ -125,7 +125,7 @@
                         </a>
                     </li>
                     <!-- Tombol Logout khusus untuk Mobile -->
-                    <li class="sm:hidden">
+                    <li>
                         <form action="{{ route('logout') }}" method="POST">
                             @csrf
                             <button type="submit"
