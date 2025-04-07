@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Complaint;
 use App\Models\Location;
 use App\Models\Setting;
 use Illuminate\Http\Request;
@@ -12,12 +13,27 @@ class DashboardController extends Controller
     public function index()
     {
         $user = Auth::user();
-        $apk = Setting::where('key', 'name')->first()->value;
-        $logo = Setting::where('key', 'logo')->first()->value;
-
         $locations = Location::all();
 
-        $data = compact('user', 'apk', 'logo', 'locations');
+        $user = Auth::user();
+        $locations = Location::all();
+
+        // Ambil pengaduan yang dibuat oleh user yang sedang login.
+        $complaintsQuery = Complaint::where('user_id', $user->id);
+
+        $totalComplaints    = $complaintsQuery->count();
+        $complaintsPending  = (clone $complaintsQuery)->where('status', 'pending')->count();
+        $complaintsProgress = (clone $complaintsQuery)->where('status', 'progress')->count();
+        $complaintsCompleted = (clone $complaintsQuery)->where('status', 'selesai')->count();
+
+        $data = compact(
+            'user',
+            'locations',
+            'totalComplaints',
+            'complaintsPending',
+            'complaintsProgress',
+            'complaintsCompleted'
+        );
         switch ($user->role) {
             case 'superAdmin':
                 return view('superadmin.dashboard');
