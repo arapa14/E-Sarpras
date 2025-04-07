@@ -125,7 +125,7 @@
                         </a>
                     </li>
                     <!-- Tombol Logout (untuk mobile) -->
-                    <li class="sm:hidden">
+                    <li>
                         <form action="{{ route('logout') }}" method="POST">
                             @csrf
                             <button type="submit"
