@@ -33,14 +33,11 @@ class SettingController extends Controller
         try {
             $isUpdated = false;
 
-            if ($request->has('name')) {
-                $setting = Setting::where('key', 'name')->firstOrFail();
+            if ($request->filled('name')) {
                 $name = $request->input('name');
-                if ($setting->value !== $name && $name !== null) {
-                    $setting->value = $name;
-                    $setting->save();
-                    $isUpdated = true;
-                }
+                Setting::where('key', 'name')
+                    ->update(['value' => $name]);
+                $isUpdated = true;
             }
 
             // Update logo sistem
@@ -66,9 +63,10 @@ class SettingController extends Controller
             }
 
             return response()->json([
-                'message' => $isUpdated ? 'Setting berhasil diperbarui.' : 'Tidak ada perubahan data.',
                 'updated' => $isUpdated,
-            ], 200);
+                'message' => $isUpdated ? 'Setting berhasil diperbarui.' : 'Tidak ada perubahan.',
+                'redirect' => route('setting.index')
+            ]);
         } catch (\Exception $e) {
             \Log::error($e);
             return response()->json(['message' => 'Gagal memperbarui setting.'], 500);
