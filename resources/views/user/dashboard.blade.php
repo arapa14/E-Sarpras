@@ -28,7 +28,7 @@
                             <span class="font-semibold">No. WhatsApp:</span> {{ $user->whatsapp }}
                         </p>
                         <p class="text-gray-700">
-                            <span class="font-semibold">Tanggal Akun Dibuat:</span> {{ $user->created_at->format('d-m-Y') }}
+                            <span class="font-semibold">Waktu Akun Dibuat:</span> {{ \Carbon\Carbon::parse($user->created_at)->format('d M Y H:i') }}
                         </p>
                     </div>
                 </div>
