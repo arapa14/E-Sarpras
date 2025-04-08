@@ -8,6 +8,7 @@ use App\Models\Setting;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\ImageManager;
 use Intervention\Image\Drivers\Gd\Driver;
@@ -227,6 +228,17 @@ class ComplaintController extends Controller
             $complaint->before_image = json_encode($imagePaths); // Simpan sebagai JSON
             $complaint->status = 'pending';
             $complaint->save();
+
+            // Kirim email notifikasi ke user bahwa complaint berhasil dikirim
+            // Asumsikan Anda telah mengatur konfigurasi Mail di Laravel Anda.
+            Mail::send('emails.complaint-created', [
+                'user'         => $user,
+                'complaint'    => $complaint,
+                'beforeImages' => $imagePaths, // Array path gambar yang telah diupload
+            ], function ($message) use ($user) {
+                $message->to($user->email)
+                    ->subject('Pengaduan Anda Berhasil Dikirim');
+            });
 
             return redirect()->back()->with('success', 'Berhasil mengirim komplain.');
         } catch (\Exception $e) {
