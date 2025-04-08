@@ -16,8 +16,36 @@
         body {
             background: radial-gradient(circle at top left, #e0f7fa, #f0f4c3);
         }
+
+        /* Animasi untuk spinner */
+        #loadingOverlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 999;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        #loadingOverlay .spinner {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
     </style>
 </head>
+
+<!-- Overlay Spinner -->
+<div id="loadingOverlay">
+    <div class="spinner">
+        <svg class="animate-spin h-12 w-12 text-white" xmlns="http://www.w3.org/2000/svg" fill="none"
+            viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4">
+            </circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+        </svg>
+    </div>
+</div>
 
 <body class="min-h-screen flex items-center justify-center p-6 font-sans bg-gradient-to-r from-blue-100 to-blue-50">
     <!-- Tombol kembali ke halaman login (floating) -->
@@ -52,6 +80,23 @@
                     @foreach ($errors->all() as $error)
                         {{ $error }}<br>
                     @endforeach
+                </div>
+            @endif
+
+            <!-- Pesan Sukses/Error -->
+            @if (session('success'))
+                <div class="mb-4 p-3 text-sm text-green-700 bg-green-100 border border-green-200 rounded">
+                    {{ session('success') }}
+                </div>
+            @endif
+            @if (session('error'))
+                <div class="mb-4 p-3 text-sm text-red-700 bg-red-100 border border-red-200 rounded">
+                    {{ session('error') }}
+                </div>
+            @endif
+            @if ($errors->any())
+                <div class="mb-4 p-3 text-sm text-red-700 bg-red-100 border border-red-200 rounded">
+                    {{ $errors->first() }}
                 </div>
             @endif
 
@@ -120,7 +165,7 @@
                 }
             });
 
-            // Menampilkan notifikasi toastr jika ada pesan dari session
+            // Toastr session messages
             @if (session('success'))
                 toastr.success("{{ session('success') }}");
             @endif
@@ -129,11 +174,16 @@
                 toastr.error("{{ session('error') }}");
             @endif
 
-            // Jika terdapat error validasi, tampilkan sebagai toastr error
+            // Validasi error toastr
             var validationErrors = $('#validation-errors').html();
             if (validationErrors) {
                 toastr.error(validationErrors);
             }
+
+            // 🌀 Tampilkan overlay loading saat form dikirim
+            $('form').on('submit', function() {
+                $('#loadingOverlay').fadeIn();
+            });
         });
     </script>
 </body>

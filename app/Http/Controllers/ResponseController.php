@@ -6,6 +6,7 @@ use App\Models\Complaint;
 use App\Models\Response;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Mail;
 
 class ResponseController extends Controller
 {
@@ -68,6 +69,24 @@ class ResponseController extends Controller
 
         // Perbarui status pengaduan
         $complaint->update(['status' => $request->status]);
+
+        // Persiapkan data email notifikasi
+        $user = $complaint->user; // pastikan relasi complaint -> user sudah tersedia di model Complaint
+        $complaintLink = route('complaint.list.detail', $complaint->id);
+
+        /// Kirim email notifikasi ke user dengan data detail pengaduan dan respon
+        Mail::send('emails.complaint-response', [
+            'user'          => $user,
+            'complaint'     => $complaint,
+            'newStatus'     => $request->status,
+            'feedback'      => $request->feedback,
+            'response_time' => $duration,
+            'afterImages'   => $imagePaths, // Array path gambar yang diupload
+            'complaintLink' => $complaintLink,
+        ], function ($message) use ($user) {
+            $message->to($user->email)
+                ->subject('Pengaduan Anda Diperbarui');
+        });
 
         return redirect()->route('complaint.list.detail', $complaint->id)
             ->with('success', 'Respon berhasil dikirim.');

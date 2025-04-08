@@ -359,19 +359,6 @@ class ComplaintController extends Controller
         }
     }
 
-
-    // public function updateStatus(Request $request, Complaint $complaint)
-    // {
-    //     // Validasi status yang diterima
-    //     $validated = $request->validate([
-    //         'status' => 'required|in:pending,progress,selesai'
-    //     ]);
-
-    //     $complaint->update($validated);
-
-    //     return response()->json(['message' => 'Status berhasil diperbarui.']);
-    // }
-
     public function detail(Complaint $complaint)
     {
         // Muat relasi user dan (jika ada) response jika diperlukan
