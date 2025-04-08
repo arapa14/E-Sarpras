@@ -83,3 +83,33 @@ Route::middleware(['auth', 'isSuperAdmin'])->group(function () {
     Route::get('/setting', [SettingController::class, 'index'])->name('setting.index');
     Route::patch('/setting/update', [SettingController::class, 'update'])->name('setting.update');
 });
+
+// Error 403: Forbidden
+Route::get('/error-403', function () {
+    abort(403, 'Akses ditolak.');
+});
+
+// Error 404: Not Found
+Route::get('/error-404', function () {
+    abort(404, 'Halaman tidak ditemukan.');
+});
+
+// Error 405: Not Found
+Route::get('/error-405', function () {
+    abort(405, 'Metode tidak diizinkan.');
+});
+
+// Error 419: Page Expired
+Route::get('/error-419', function () {
+    abort(419, 'Sesi telah kedaluwarsa.');
+});
+
+// Error 500: Internal Server Error
+Route::get('/error-500', function () {
+    abort(500, 'Terjadi kesalahan pada server.');
+});
+
+// Error 502: Bad Gateway
+Route::get('/error-502', function () {
+    abort(502, 'Bad Gateway.');
+});
