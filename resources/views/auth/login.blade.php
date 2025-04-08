@@ -223,7 +223,7 @@
                 <div class="mt-2 text-center">
                     <p id="switchText" class="text-gray-600 text-sm">
                         Lupa password?
-                        <a href="#" class="text-blue-600 hover:underline focus:outline-none">Reset Kata
+                        <a href="{{ route('password.request')}}" class="text-blue-600 hover:underline focus:outline-none">Reset Kata
                             Sandi</a>
                     </p>
                 </div>
@@ -341,7 +341,7 @@
             loginTab.setAttribute('aria-selected', 'true');
             registerTab.setAttribute('aria-selected', 'false');
             switchText.innerHTML =
-                'Lupa password? <a href="#" class="text-blue-600 hover:underline focus:outline-none">Reset Kata Sandi</a>';
+                'Lupa password? <a href="{{ route('password.request')}}" class="text-blue-600 hover:underline focus:outline-none">Reset Kata Sandi</a>';
         }
 
         function showRegister() {

@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ComplaintController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\FaqController;
+use App\Http\Controllers\ForgotPasswordController;
 use App\Http\Controllers\LocationController;
 use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\ResponseController;
@@ -83,6 +84,15 @@ Route::middleware(['auth', 'isSuperAdmin'])->group(function () {
     Route::get('/setting', [SettingController::class, 'index'])->name('setting.index');
     Route::patch('/setting/update', [SettingController::class, 'update'])->name('setting.update');
 });
+
+// Tampilkan halaman form lupa password
+Route::get('/forgot-password', [ForgotPasswordController::class, 'showForgotForm'])->name('password.request');
+// Proses pengiriman link reset password ke email
+Route::post('/forgot-password', [ForgotPasswordController::class, 'sendResetLinkEmail'])->name('password.email');
+// Tampilkan halaman reset password (diakses melalui link email)
+Route::get('/reset-password/{token}', [ForgotPasswordController::class, 'showResetForm'])->name('password.reset');
+// Proses update password
+Route::post('/reset-password', [ForgotPasswordController::class, 'resetPassword'])->name('password.update');
 
 // Error 403: Forbidden
 Route::get('/error-403', function () {
