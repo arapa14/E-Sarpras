@@ -243,18 +243,99 @@
         </div>
     </section>
 
-    <!-- Tutorial Section -->
-    <section id="tutorial" class="py-16 bg-gray-100" data-aos="fade-up" data-aos-duration="1000">
-        <div class="container mx-auto px-6">
-            <h2 class="text-4xl font-bold text-center mb-12">Cara Membuat Laporan</h2>
-            <div
-                class="bg-white p-10 rounded-2xl shadow-lg hover:shadow-2xl transition transform hover:scale-105 max-w-3xl mx-auto">
-                <ol class="list-decimal list-inside space-y-4 text-xl text-gray-600">
-                    <li>Login ke akun e-Sarpras Anda.</li>
-                    <li>Pilih menu "Buat Laporan".</li>
-                    <li>Isi form laporan dengan informasi yang diperlukan.</li>
-                    <li>Submit laporan dan tunggu konfirmasi dari admin.</li>
-                </ol>
+    <!-- Timeline Tutorial Section -->
+    <section id="tutorial" class="py-16 bg-gradient-to-br from-sky-50 via-gray-100 to-sky-200">
+        <div class="container mx-auto px-4 max-w-3xl">
+            <h2 class="text-4xl font-extrabold text-center text-gray-800 mb-12">Cara Membuat Laporan</h2>
+
+            <div class="space-y-10">
+                <!-- Langkah 1 -->
+                <div class="flex items-start space-x-4">
+                    <div class="flex-shrink-0">
+                        <div
+                            class="w-12 h-12 bg-blue-600 text-white rounded-full flex items-center justify-center text-xl font-bold shadow-md">
+                            1
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-2xl shadow-md hover:shadow-xl transition-all w-full">
+                        <h3 class="text-xl font-semibold text-gray-800 mb-2">Buat Akun</h3>
+                        <p class="text-gray-600">Daftarkan diri Anda dan lengkapi data akun dengan benar.</p>
+                    </div>
+                </div>
+
+                <!-- Langkah 2 -->
+                <div class="flex items-start space-x-4">
+                    <div class="flex-shrink-0">
+                        <div
+                            class="w-12 h-12 bg-blue-600 text-white rounded-full flex items-center justify-center text-xl font-bold shadow-md">
+                            2
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-2xl shadow-md hover:shadow-xl transition-all w-full">
+                        <h3 class="text-xl font-semibold text-gray-800 mb-2">Login</h3>
+                        <p class="text-gray-600">Masuk ke akun E-Sarpras Anda menggunakan email dan password.</p>
+                    </div>
+                </div>
+
+                <!-- Langkah 3 -->
+                <div class="flex items-start space-x-4">
+                    <div class="flex-shrink-0">
+                        <div
+                            class="w-12 h-12 bg-blue-600 text-white rounded-full flex items-center justify-center text-xl font-bold shadow-md">
+                            3
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-2xl shadow-md hover:shadow-xl transition-all w-full">
+                        <h3 class="text-xl font-semibold text-gray-800 mb-2">Pilih Menu Pengaduan</h3>
+                        <p class="text-gray-600">Klik menu <span class="font-medium">"Buat Pengaduan"</span> di
+                            dashboard Anda.</p>
+                    </div>
+                </div>
+
+                <!-- Langkah 4 -->
+                <div class="flex items-start space-x-4">
+                    <div class="flex-shrink-0">
+                        <div
+                            class="w-12 h-12 bg-blue-600 text-white rounded-full flex items-center justify-center text-xl font-bold shadow-md">
+                            4
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-2xl shadow-md hover:shadow-xl transition-all w-full">
+                        <h3 class="text-xl font-semibold text-gray-800 mb-2">Isi Form Laporan</h3>
+                        <p class="text-gray-600">Lengkapi informasi pengaduan dengan jelas dan lengkap agar mudah
+                            diproses.</p>
+                    </div>
+                </div>
+
+                <!-- Langkah 5 -->
+                <div class="flex items-start space-x-4">
+                    <div class="flex-shrink-0">
+                        <div
+                            class="w-12 h-12 bg-blue-600 text-white rounded-full flex items-center justify-center text-xl font-bold shadow-md">
+                            5
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-2xl shadow-md hover:shadow-xl transition-all w-full">
+                        <h3 class="text-xl font-semibold text-gray-800 mb-2">Kirim Laporan</h3>
+                        <p class="text-gray-600">Tekan tombol <span class="font-medium">"Submit"</span> dan tunggu
+                            konfirmasi dari admin.</p>
+                    </div>
+                </div>
+
+                <!-- Langkah 6 -->
+                <div class="flex items-start space-x-4">
+                    <div class="flex-shrink-0">
+                        <div
+                            class="w-12 h-12 bg-blue-600 text-white rounded-full flex items-center justify-center text-xl font-bold shadow-md">
+                            6
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-2xl shadow-md hover:shadow-xl transition-all w-full">
+                        <h3 class="text-xl font-semibold text-gray-800 mb-2">Cek Riwayat</h3>
+                        <p class="text-gray-600">Pantau status laporan Anda di menu <span class="font-medium">"Riwayat
+                                Pengaduan"</span>.</p>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
