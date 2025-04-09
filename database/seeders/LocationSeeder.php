@@ -31,9 +31,6 @@ class LocationSeeder extends Seeder
                 'location' => 'Ruang Theater'
             ],
             [
-                'location' => 'Ruang Theater'
-            ],
-            [
                 'location' => 'Ruang Serba Guna'
             ],
             [

@@ -21,28 +21,28 @@ class UserSeeder extends Seeder
                 'email'    => 'superadmin@gmail.com',
                 'whatsapp' => '08123456789',
                 'role'     => 'superAdmin',
-                'password' => Hash::make('lorem-ipsum')
+                'password' => Hash::make('lorem-ipsum_123')
             ],
             [
                 'name'     => 'Admin',
                 'email'    => 'admin@gmail.com',
                 'whatsapp' => '08123456789',
                 'role'     => 'admin',
-                'password' => Hash::make('lorem-ipsum'),
+                'password' => Hash::make('lorem-ipsum_123'),
             ],
             [
                 'name'     => 'Teacher',
                 'email'    => 'teacher@gmail.com',
                 'whatsapp' => '08123456789',
                 'role'     => 'user',
-                'password' => Hash::make('lorem-ipsum'),
+                'password' => Hash::make('lorem-ipsum_123'),
             ],
             [
                 'name'     => 'Student',
                 'email'    => 'student@gmail.com',
                 'whatsapp' => '08123456789',
                 'role'     => 'user',
-                'password' => Hash::make('lorem-ipsum'),
+                'password' => Hash::make('lorem-ipsum_123'),
             ],
         ];
 

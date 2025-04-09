@@ -17,6 +17,7 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             LocationSeeder::class,
             SettingSeeder::class,
+            FaqSeeder::class
         ]);
     }
 }
