@@ -259,9 +259,9 @@ class ComplaintController extends Controller
             ->editColumn('status', function ($row) {
                 // Sesuaikan badge status berdasarkan nilai status di database
                 $statusClass = match ($row->status) {
-                    'pending'  => 'bg-yellow-100 text-yellow-600',
-                    'progress' => 'bg-blue-100 text-blue-600',
-                    'selesai'  => 'bg-green-100 text-green-600',
+                    'pending'  => 'bg-yellow-100 text-yellow-700 border border-yellow-500',
+                    'progress' => 'bg-blue-100 text-blue-700 border border-blue-500',
+                    'selesai'  => 'bg-green-100 text-green-700 border border-green-500',
                     default    => 'bg-gray-100 text-gray-600'
                 };
                 return "<span class='px-3 py-1 $statusClass rounded-full text-xs font-semibold uppercase'>$row->status</span>";

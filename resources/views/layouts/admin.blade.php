@@ -221,6 +221,10 @@
             document.getElementById('loadingOverlay').style.display = 'block';
         }
 
+        function hideSpinner() {
+            document.getElementById('loadingOverlay').style.display = 'none';
+        }
+
         // Tampilkan spinner saat berpindah halaman
         document.addEventListener("DOMContentLoaded", function() {
             const links = document.querySelectorAll("a");

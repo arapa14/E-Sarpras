@@ -4,14 +4,14 @@
     <div class="container mx-auto px-4 py-8">
         <div class="bg-white shadow rounded-lg p-6">
             <div class="flex flex-col sm:flex-row sm:justify-between items-start sm:items-center mb-6">
-                <h2 class="text-2xl font-bold text-gray-800">Dashboard Pengaduan</h2>
-                <div class="flex flex-col sm:flex-row gap-4">
+                <h2 class="text-2xl font-bold text-gray-800 mb-4 sm:mb-0">Dashboard Pengaduan</h2>
+                <div class="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
                     <a href="{{ route('complaint.index') }}"
-                        class="inline-block bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg shadow">
+                        class="block w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg shadow text-center transition duration-150">
                         Buat Pengaduan
                     </a>
                     <a href="{{ route('profile.edit') }}"
-                        class="inline-block bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded-lg shadow">
+                        class="block w-full sm:w-auto bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-6 rounded-lg shadow text-center transition duration-150">
                         Edit Profil
                     </a>
                 </div>

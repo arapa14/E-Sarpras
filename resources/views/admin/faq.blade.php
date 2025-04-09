@@ -73,7 +73,6 @@
         .btn-delete:hover {
             background-color: #dc2626;
         }
-
     </style>
 @endsection
 
@@ -245,6 +244,31 @@
             </div>
         </div>
     </div>
+
+    <!-- Modal Delete FAQ -->
+    <div id="deleteFaqModal" class="fixed inset-0 hidden z-50 overflow-y-auto">
+        <div class="flex items-center justify-center min-h-screen px-4">
+            <!-- Background overlay -->
+            <div class="fixed inset-0 transition-opacity" aria-hidden="true">
+                <div class="absolute inset-0 bg-gray-900 opacity-50"></div>
+            </div>
+            <!-- Modal content -->
+            <div class="bg-white rounded-lg shadow-xl sm:max-w-md w-full relative">
+                <div class="px-4 py-3 border-b">
+                    <h5 class="text-lg font-bold text-gray-800">Konfirmasi Hapus</h5>
+                </div>
+                <div class="px-4 py-5">
+                    <p class="text-gray-700">Apakah Anda yakin akan menghapus FAQ ini?</p>
+                </div>
+                <div class="px-4 py-3 border-t flex justify-end space-x-2">
+                    <button type="button" id="cancelDeleteFaq"
+                        class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 focus:outline-none">Batal</button>
+                    <button type="button" id="confirmDeleteFaq"
+                        class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 focus:outline-none">Hapus</button>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
 
 @section('scripts')
@@ -253,7 +277,11 @@
     <!-- Bootstrap JS (untuk modal) -->
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script>
+        // Variabel untuk menyimpan id FAQ yang akan dihapus
+        var deleteFaqId = null;
+
         $(document).ready(function() {
+
             // Inisialisasi DataTable untuk pertanyaan
             var questionsTable = $('#questions-table').DataTable({
                 processing: true,
@@ -334,6 +362,16 @@
                 }
             });
 
+            // Fungsi bawaan spinner (sesuaikan implementasi fungsi Anda)
+            function showSpinner() {
+                // contoh implementasi, misalnya aktifkan overlay loading
+                console.log('Show spinner');
+            }
+
+            function hideSpinner() {
+                console.log('Hide spinner');
+            }
+
             // Buka modal tambah FAQ
             $(document).on('click', '#openNewFaqModal', function() {
                 $("#newFaqModal").removeClass("hidden");
@@ -344,9 +382,10 @@
                 $("#newFaqModal").addClass("hidden");
             });
 
-            // Submit form tambah FAQ via Ajax
+            // Submit form tambah FAQ via Ajax dengan spinner
             $('#newFaqForm').on('submit', function(e) {
                 e.preventDefault();
+                showSpinner();
                 var formData = $(this).serialize();
                 $.ajax({
                     url: '/faq',
@@ -356,22 +395,25 @@
                         'X-CSRF-TOKEN': '{{ csrf_token() }}'
                     },
                     success: function(response) {
+                        hideSpinner();
                         $("#newFaqModal").addClass("hidden");
                         toastr.success(response.message);
                         $('#faq-table').DataTable().ajax.reload(null, false);
                         $('#newFaqForm')[0].reset();
                     },
                     error: function(xhr) {
+                        hideSpinner();
                         toastr.error('Gagal menyimpan FAQ baru.');
                     }
                 });
             });
 
-            // Handler untuk change status (dropdown di tabel FAQ)
+            // Handler untuk change status (dropdown di tabel FAQ) dengan spinner
             $(document).on('change', '.faq-status-dropdown', function() {
                 var faqId = $(this).data('id');
                 var status = $(this).val();
                 var dropdown = $(this);
+                showSpinner();
                 $.ajax({
                     url: '/faq/' + faqId + '/status',
                     type: 'PATCH',
@@ -382,6 +424,7 @@
                         'X-CSRF-TOKEN': '{{ csrf_token() }}'
                     },
                     success: function(response) {
+                        hideSpinner();
                         var selectedOption = dropdown.find('option:selected').data('class');
                         dropdown.removeClass().addClass(
                             'faq-status-dropdown border border-gray-300 rounded p-1 ' +
@@ -390,26 +433,43 @@
                         faqTable.ajax.reload(null, false);
                     },
                     error: function(xhr) {
+                        hideSpinner();
                         toastr.error('Gagal memperbarui status.');
                     }
                 });
             });
 
-            // Handler untuk tombol delete FAQ
+            // Handler untuk tombol delete FAQ (buka modal delete)
             $(document).on('click', '.btn-delete', function() {
-                var faqId = $(this).data('id');
-                if (confirm('Apakah Anda yakin akan menghapus FAQ ini?')) {
+                deleteFaqId = $(this).data('id');
+                $("#deleteFaqModal").removeClass("hidden");
+            });
+
+            // Batal delete FAQ
+            $("#cancelDeleteFaq").on("click", function() {
+                deleteFaqId = null;
+                $("#deleteFaqModal").addClass("hidden");
+            });
+
+            // Konfirmasi delete FAQ dengan spinner
+            $("#confirmDeleteFaq").on("click", function() {
+                if (deleteFaqId) {
+                    showSpinner();
                     $.ajax({
-                        url: '/faq/' + faqId,
+                        url: '/faq/' + deleteFaqId,
                         type: 'DELETE',
                         headers: {
                             'X-CSRF-TOKEN': '{{ csrf_token() }}'
                         },
                         success: function(response) {
+                            hideSpinner();
                             toastr.success(response.message);
                             faqTable.ajax.reload(null, false);
+                            $("#deleteFaqModal").addClass("hidden");
+                            deleteFaqId = null;
                         },
                         error: function(xhr) {
+                            hideSpinner();
                             toastr.error('Gagal menghapus FAQ.');
                         }
                     });
@@ -425,7 +485,10 @@
                 $('#faq_id').val(faqId);
                 $('#faq_question').val(question);
                 $('#faq_answer').val(answer);
-                $('#faq_status').val(status);
+                // Set status radio yang sesuai
+                $('#editFaqForm input[name="status"]').each(function() {
+                    $(this).prop('checked', $(this).val() === status);
+                });
                 $("#editFaqModal").removeClass("hidden");
             });
 
@@ -434,21 +497,24 @@
                 $("#editFaqModal").addClass("hidden");
             });
 
-            // Submit form edit FAQ dengan Ajax
+            // Submit form edit FAQ dengan Ajax dan spinner
             $('#editFaqForm').on('submit', function(e) {
                 e.preventDefault();
                 var faqId = $('#faq_id').val();
                 var formData = $(this).serialize();
+                showSpinner();
                 $.ajax({
                     url: '/faq/' + faqId,
                     type: 'PATCH',
                     data: formData,
                     success: function(response) {
+                        hideSpinner();
                         $("#editFaqModal").addClass("hidden");
                         toastr.success(response.message);
                         faqTable.ajax.reload(null, false);
                     },
                     error: function(xhr) {
+                        hideSpinner();
                         toastr.error('Gagal memperbarui FAQ.');
                     }
                 });

@@ -204,7 +204,7 @@
     <!-- FAQ Section dengan Accordion -->
     <section id="faq" class="py-16" data-aos="fade-up" data-aos-duration="1000">
         <div class="container mx-auto px-6">
-            <h2 class="text-4xl font-bold text-center mb-12">Pertanyaan Umum</h2>
+            <h2 class="text-4xl font-bold text-center mb-12">Frequently Asked Questions (FAQ)</h2>
             <div class="space-y-6">
                 @forelse ($faqs->where('status', 'published') as $index => $faq)
                     <div x-data="{ open: false }" class="bg-white rounded-2xl shadow-lg overflow-hidden">
@@ -361,7 +361,7 @@
                         <label for="question" class="block text-xl font-medium mb-2">Pertanyaan Anda</label>
                         <textarea name="question" id="question" rows="4"
                             class="w-full px-5 py-4 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
-                            placeholder="Tulis pertanyaan Anda di sini..."></textarea>
+                            placeholder="Jika anda memiliki pertanyaan atau menemukan bug, silahkan tuliskan di sini"></textarea>
                     </div>
                     <button type="submit"
                         class="w-full px-6 py-4 bg-blue-600 text-white font-semibold rounded-full shadow-lg hover:bg-blue-700 transition">

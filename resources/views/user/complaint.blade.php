@@ -64,7 +64,7 @@
             </div>
 
             <div class="mt-4">
-                <input type="text" name="description" placeholder="Deskripsi" class="w-full p-2 border rounded-md" />
+                <input type="text" name="description" placeholder="ex: 401. AC Rusak" class="w-full p-2 border rounded-md" />
             </div>
 
             <div class="mt-4">
