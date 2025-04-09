@@ -37,6 +37,9 @@ Route::middleware(['auth', 'isUser'])->group(function () {
     Route::get('/riwayat', [ComplaintController::class, 'riwayat'])->name('complaint.riwayat');
     Route::get('/riwayat/data', [ComplaintController::class, 'getRiwayat'])->name('complaint.getRiwayat');
     Route::get('/complaint/{complaint}', [ComplaintController::class, 'show'])->name('complaint.detail');
+
+    Route::get('/profile/edit', [UserController::class, 'editProfile'])->name('profile.edit');
+    Route::patch('/profile/update', [UserController::class, 'updateProfile'])->name('profile.update');
 });
 
 Route::middleware(['auth', 'isAdminOrSuperAdmin'])->group(function () {

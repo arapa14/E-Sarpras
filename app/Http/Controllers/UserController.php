@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use Illuminate\Validation\Rule;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Yajra\DataTables\Facades\DataTables;
 
 class UserController extends Controller
@@ -157,5 +159,49 @@ class UserController extends Controller
         }
 
         abort(403);
+    }
+
+    /**
+     * Menampilkan halaman edit profil.
+     */
+    public function editProfile()
+    {
+        $user = Auth::user();
+        return view('user.profile', compact('user'));
+    }
+
+    /**
+     * Memproses update data profil.
+     */
+    public function updateProfile(Request $request)
+    {
+        $user = Auth::user();
+
+        // Validasi input
+        $validated = $request->validate([
+            'name'      => 'required|string|max:255',
+            'email'     => [
+                'required',
+                'email',
+                'max:255',
+                Rule::unique('users')->ignore($user->id),
+            ],
+            'whatsapp'  => 'required|string|max:20',
+            'password'  => 'nullable|confirmed|min:8',
+        ]);
+
+        // Update data pengguna
+        $user->name     = $validated['name'];
+        $user->email    = $validated['email'];
+        $user->whatsapp = $validated['whatsapp'];
+
+        // Jika pengguna mengubah password, maka update juga
+        if (!empty($validated['password'])) {
+            $user->password = Hash::make($validated['password']);
+        }
+
+        $user->save();
+
+        return redirect()->route('dashboard')->with('success', 'Profil berhasil diperbarui');
     }
 }

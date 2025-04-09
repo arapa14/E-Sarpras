@@ -5,10 +5,16 @@
         <div class="bg-white shadow rounded-lg p-6">
             <div class="flex flex-col sm:flex-row sm:justify-between items-start sm:items-center mb-6">
                 <h2 class="text-2xl font-bold text-gray-800">Dashboard Pengaduan</h2>
-                <a href="{{ route('complaint.index') }}"
-                    class="mt-4 sm:mt-0 inline-block bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg shadow">
-                    Buat Pengaduan
-                </a>
+                <div class="flex flex-col sm:flex-row gap-4">
+                    <a href="{{ route('complaint.index') }}"
+                        class="inline-block bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg shadow">
+                        Buat Pengaduan
+                    </a>
+                    <a href="{{ route('profile.edit') }}"
+                        class="inline-block bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded-lg shadow">
+                        Edit Profil
+                    </a>
+                </div>
             </div>
 
             <!-- Informasi Akun Pengguna -->
@@ -28,7 +34,8 @@
                             <span class="font-semibold">No. WhatsApp:</span> {{ $user->whatsapp }}
                         </p>
                         <p class="text-gray-700">
-                            <span class="font-semibold">Waktu Akun Dibuat:</span> {{ \Carbon\Carbon::parse($user->created_at)->format('d M Y H:i') }}
+                            <span class="font-semibold">Waktu Akun Dibuat:</span>
+                            {{ \Carbon\Carbon::parse($user->created_at)->format('d M Y H:i') }}
                         </p>
                     </div>
                 </div>
