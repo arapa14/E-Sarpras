@@ -31,7 +31,7 @@ class ResponseController extends Controller
      */
     public function store(Request $request, Complaint $complaint)
     {
-        // Validasi input, pastikan after_image adalah array dan minimal memiliki 1 gambar
+        // Validasi input
         $request->validate([
             'feedback'      => 'required|string',
             'after_image'   => 'required|array|min:1',
@@ -39,7 +39,7 @@ class ResponseController extends Controller
             'status'        => 'required|in:pending,progress,selesai',
         ]);
 
-        // Hitung durasi respon dalam menit
+        // Hitung durasi respon
         $duration = \Carbon\Carbon::parse($complaint->created_at)->diffInMinutes(now());
 
         // Persiapkan data untuk disimpan ke table responses
@@ -47,13 +47,11 @@ class ResponseController extends Controller
             'complaint_id'  => $complaint->id,
             'feedback'      => $request->feedback,
             'new_status'    => $request->status,
-            'response_time' => $duration, // Simpan jumlah menit
+            'response_time' => $duration,
         ];
 
         // Inisialisasi array untuk menyimpan path gambar
         $imagePaths = [];
-
-        // Proses upload gambar, karena gambar tidak opsional maka selalu ada
         $directory = 'responses';
         if (!Storage::exists("public/{$directory}")) {
             Storage::makeDirectory("public/{$directory}");
@@ -71,22 +69,19 @@ class ResponseController extends Controller
         $complaint->update(['status' => $request->status]);
 
         // Persiapkan data email notifikasi
-        $user = $complaint->user; // pastikan relasi complaint -> user sudah tersedia di model Complaint
+        $user = $complaint->user;
         $complaintLink = route('complaint.list.detail', $complaint->id);
 
-        /// Kirim email notifikasi ke user dengan data detail pengaduan dan respon
-        Mail::send('emails.complaint-response', [
-            'user'          => $user,
-            'complaint'     => $complaint,
-            'newStatus'     => $request->status,
-            'feedback'      => $request->feedback,
-            'response_time' => $duration,
-            'afterImages'   => $imagePaths, // Array path gambar yang diupload
-            'complaintLink' => $complaintLink,
-        ], function ($message) use ($user) {
-            $message->to($user->email)
-                ->subject('Pengaduan Anda Diperbarui');
-        });
+        // Dispatch job untuk mengirim email secara asinkron
+        dispatch(new \App\Jobs\SendResponseNotificationEmail(
+            $user,
+            $complaint,
+            $request->status,
+            $request->feedback,
+            $duration,
+            $imagePaths,
+            $complaintLink
+        ));
 
         return redirect()->route('complaint.list.detail', $complaint->id)
             ->with('success', 'Respon berhasil dikirim.');

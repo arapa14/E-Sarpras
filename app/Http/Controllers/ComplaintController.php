@@ -188,28 +188,23 @@ class ComplaintController extends Controller
     {
         // Validasi input dari form
         $request->validate([
-            'before_image' => 'required|array|min:1', // Validasi array gambar
-            'before_image.*' => 'file|image|mimes:jpg,png,jpeg', // Setiap gambar harus valid
+            'before_image' => 'required|array|min:1',
+            'before_image.*' => 'file|image|mimes:jpg,png,jpeg',
             'description' => 'required|string',
             'location' => 'required|string|not_in:Pilih lokasi',
             'suggestion' => 'required|string',
         ]);
 
         $user = Auth::user();
-        $imagePaths = []; // Array untuk menyimpan path gambar
-
-        // Nama prefix untuk gambar
+        $imagePaths = [];
         $imageNamePrefix = 'complain';
-        // Direktori penyimpanan gambar
         $directory = 'complaints';
+
         if (!Storage::exists("public/{$directory}")) {
             Storage::makeDirectory("public/{$directory}");
         }
 
-        // Watermark: nama user + timestamp
         $watermarkText = $user->name . " - " . now()->format('d/m/Y H:i:s');
-
-        // Path font
         $fontPath = public_path('arial.ttf');
 
         // Proses semua gambar yang diunggah
@@ -225,20 +220,12 @@ class ComplaintController extends Controller
             $complaint->description = $request->input('description');
             $complaint->location = $request->input('location');
             $complaint->suggestion = $request->input('suggestion');
-            $complaint->before_image = json_encode($imagePaths); // Simpan sebagai JSON
+            $complaint->before_image = json_encode($imagePaths);
             $complaint->status = 'pending';
             $complaint->save();
 
-            // Kirim email notifikasi ke user bahwa complaint berhasil dikirim
-            // Asumsikan Anda telah mengatur konfigurasi Mail di Laravel Anda.
-            Mail::send('emails.complaint-created', [
-                'user'         => $user,
-                'complaint'    => $complaint,
-                'beforeImages' => $imagePaths, // Array path gambar yang telah diupload
-            ], function ($message) use ($user) {
-                $message->to($user->email)
-                    ->subject('Pengaduan Anda Berhasil Dikirim');
-            });
+            // Dispatch job untuk mengirim email secara asinkron
+            dispatch(new \App\Jobs\SendComplaintCreatedEmail($user, $complaint, $imagePaths));
 
             return redirect()->back()->with('success', 'Berhasil mengirim komplain.');
         } catch (\Exception $e) {
