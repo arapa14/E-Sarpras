@@ -55,6 +55,12 @@
 </head>
 
 <body class="bg-gray-50 font-sans">
+    @php
+        // Melakukan fetching data langsung di layout untuk menghitung jumlah pending.
+        $complaintsPending = \App\Models\Complaint::where('status', 'pending')->count();
+        $questionsPending = \App\Models\Question::where('status', 'pending')->count();
+    @endphp
+
     <!-- Overlay Spinner -->
     <div id="loadingOverlay">
         <div class="spinner">
@@ -69,10 +75,17 @@
 
     <div class="min-h-screen flex flex-col">
         <!-- Header khusus untuk Mobile (fixed dan transparan) -->
-        <header class="fixed top-0 inset-x-0 z-40 bg-gradient-to-r from-blue-600 to-blue-800 shadow-md p-4 sm:hidden">
+        <header class="fixed top-0 inset-x-0 z-20 bg-gradient-to-r from-blue-600 to-blue-800 shadow-md p-4 sm:hidden">
             <div class="flex items-center justify-between">
-                <button id="sidebarToggle" class="text-white focus:outline-none">
+                <button id="sidebarToggle" class="text-white focus:outline-none relative">
                     <i class="fas fa-bars fa-2x"></i>
+                    {{-- Badge untuk total pengaduan dan pertanyaan pending --}}
+                    @if ($complaintsPending + $questionsPending > 0)
+                        <span
+                            class="absolute -top-1 -right-1 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white bg-red-500 rounded-full">
+                            {{ $complaintsPending + $questionsPending }}
+                        </span>
+                    @endif
                 </button>
                 <span id="realTimeClock" class="text-white font-semibold text-lg">Memuat Waktu...</span>
                 <div class="w-8"></div>
@@ -117,12 +130,24 @@
                         <a href="{{ route('complaint.list') }}"
                             class="flex items-center p-3 rounded transition-colors duration-300 {{ request()->is('complaint') ? 'active' : '' }}">
                             <i class="fas fa-comment-alt mr-3"></i> Pengaduan
+                            @if ($complaintsPending > 0)
+                                <span
+                                    class="ml-auto inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white bg-red-500 rounded-full">
+                                    {{ $complaintsPending }}
+                                </span>
+                            @endif
                         </a>
                     </li>
                     <li>
                         <a href="{{ route('faq.index') }}"
                             class="flex items-center p-3 rounded transition-colors duration-300 {{ request()->is('faq') ? 'active' : '' }}">
                             <i class="fas fa-history mr-3"></i> Frequently Asked Questions (FAQ)
+                            @if ($questionsPending > 0)
+                                <span
+                                    class="ml-auto inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white bg-red-500 rounded-full">
+                                    {{ $questionsPending }}
+                                </span>
+                            @endif
                         </a>
                     </li>
 
@@ -144,7 +169,7 @@
                                 class="flex items-center p-3 rounded transition-colors duration-300 {{ request()->is('setting') ? 'active' : '' }}">
                                 <i class="fas fa-cogs mr-3"></i> Pengaturan
                             </a>
-                        </li>,
+                        </li>
                     @endif
 
                     <!-- Tombol Logout khusus untuk Mobile -->
