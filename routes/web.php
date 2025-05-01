@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AnonimController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ComplaintController;
 use App\Http\Controllers\DashboardController;
@@ -29,6 +30,12 @@ Route::get('/switch-back', [UserController::class, 'switchBack'])->name('user.sw
 
 // Route Landing
 Route::post('/question', [QuestionController::class, 'store'])->name('question.store');
+
+// Anonim
+Route::get('/anonim', [AnonimController::class, 'index'])->name('anonim.index');
+Route::post('/anonim', [AnonimController::class, 'store'])->name('anonim.store');
+// Cek Status
+Route::post('/anonim/check', [AnonimController::class, 'checkStatus'])->name('anonim.check');
 
 // Route User
 Route::middleware(['auth', 'isUser'])->group(function () {
