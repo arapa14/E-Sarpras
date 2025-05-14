@@ -1,6 +1,8 @@
 @extends('layouts.guest')
 
 @section('content')
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
+
 
   <!-- Scroll Indicator -->
   <div id="progressBarContainer" style="position: fixed; top: 0; left: 0; width: 100%; height: 4px; background-color: #e5e7eb; z-index: 9999;">
@@ -11,87 +13,80 @@
     transition: width 0.2s ease-out;
   "></div>
 </div>
-
-  <!-- Hero Section -->
-<section id="hero" class="relative h-screen flex items-center bg-gradient-to-b from-blue-300 via-blue-200 to-blue-100 bg-opacity-40">
+<!-- HERO SEKYEN -->
+<section id="hero" class="relative h-screen flex items-center bg-gradient-to-b from-blue-300 via-blue-200 to-blue-100 overflow-hidden">
+  <!-- Overlay gradient -->
   <div class="absolute inset-0 bg-gradient-to-b from-blue-300 via-blue-200 to-blue-100 opacity-30 z-10"></div>
-  
-  <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-10 px-6">
-    <div class="flex flex-col justify-center">
-      <h1 class="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
-        Laporkan & Pantau Sarpras Sekolah dengan Mudah.
-      </h1>
-      <p class="text-lg text-gray-700 mb-8">
-        E-Sarpras mempermudah pengaduan kerusakan & pantauan progres perbaikan secara real-time tanpa ribet.
-      </p>
-      <div class="flex space-x-4">
-        <a href="{{ route('login') }}" class="px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700">
+
+  <!-- Container -->
+  <div class="relative z-20 flex flex-col-reverse lg:flex-row items-center justify-between w-full max-w-[1280px] px-6 md:px-10 mx-auto">
+    <!-- TEXT AREA -->
+    <div class="w-full lg:w-1/2 text-left mb-10 lg:mb-0" data-aos="fade-right" data-aos-duration="1000">
+    <h2 class="text-3xl sm:text-4xl md:text-5xl lg:text-5xl xl:text-6xl font-extrabold leading-tight text-blue-900 drop-shadow-md">
+  Pengaduan Sarana Prasarana
+</h2>
+<p class="text-base sm:text-lg md:text-xl text-blue-700 mt-4 mb-8 max-w-xl drop-shadow-sm">
+  E-Sarpras memudahkan Anda melaporkan kerusakan, memantau perbaikan, dan mendapatkan informasi real-time dengan mudah.
+</p>
+      <div class="flex flex-col sm:flex-row gap-4">
+        <a href="{{ route('login') }}" class="px-6 py-3 bg-white text-blue-600 font-semibold rounded-full shadow hover:bg-gray-100 transition">
           Mulai Sekarang
         </a>
-        <a href="#features" class="px-6 py-3 border border-gray-300 text-gray-700 font-semibold rounded-lg hover:bg-gray-100">
+        <a href="#features" class="px-6 py-3 border border-white text-white font-semibold rounded-full hover:bg-white hover:text-blue-600 transition">
           Pelajari Lebih Lanjut
         </a>
       </div>
     </div>
-    <div class="flex items-center justify-center">
-      <!-- Swiper-->
-      <div class="swiper w-full max-w-md rounded-lg overflow-hidden shadow-xl">
+
+    <!-- SLIDER / IMAGE -->
+    <div class="w-full lg:w-1/2 mb-6 lg:mb-0 scale-[1.08] md:scale-[1.1] xl:scale-100" data-aos="fade-left" data-aos-duration="1000">
+    <div class="swiper mySwiper rounded-xl overflow-hidden shadow-lg">
         <div class="swiper-wrapper">
-          <div class="swiper-slide">
-            <img src="{{ asset('') }}" alt="Slide 1" class="w-full">
-          </div>
-          <div class="swiper-slide">
-            <img src="{{ asset('') }}" alt="Slide 2" class="w-full">
-          </div>
-          <div class="swiper-slide">
-            <img src="{{ asset('') }}" alt="Slide 3" class="w-full">
-          </div>
+            @foreach (['storage/logos/3.png', 'storage/logos/2.jpg', 'storage/logos/1.jpg', 'storage/logos/slide4.jpg', 'storage/logos/slide5.jpg'] as $slide)
+                <div class="swiper-slide">
+                    <img src="{{ asset($slide) }}" alt="Slide Image" class="w-full h-auto object-cover">
+                </div>
+            @endforeach
         </div>
-      </div>
+        <div class="swiper-pagination"></div>
     </div>
-  </div>
+</div>
+    </div>
 </section>
+
 
 <!-- Features Section -->
 <section id="features" class="py-16 bg-gradient-to-br from-blue-50 via-white to-blue-100" data-aos="fade-up" data-aos-duration="1000">
     <div class="container mx-auto px-6">
         <h2 class="text-4xl font-bold text-center mb-12 text-gray-800">Keunggulan e-Sarpras</h2>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
-            <!-- Feature 1 -->
-            <div
-                class="flex flex-col items-center text-center p-8 rounded-2xl shadow-md hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 bg-white border border-gray-100"
-                data-aos="zoom-in" data-aos-delay="100">
-                <div class="w-16 h-16 mx-auto mb-4 flex items-center justify-center bg-blue-100 rounded-full">
-          📝
-        </div>
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4"></path>
-                </svg>
-                <h3 class="text-2xl font-semibold mb-2">Mudah Digunakan</h3>
-                <p class="text-gray-600">Antarmuka yang intuitif memudahkan setiap pengguna untuk mengakses informasi dengan cepat.</p>
-            </div>
-            <!-- Feature 2 -->
-            <div
-                class="flex flex-col items-center text-center p-8 rounded-2xl shadow-md hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 bg-white border border-gray-100"
-                data-aos="zoom-in" data-aos-delay="200">
-                <svg class="w-16 h-16 text-blue-600 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M12 8c-1.657 0-3 1.343-3 3 0 1.306.835 2.417 2 2.83V18h2v-4.17c1.165-.413 2-1.524 2-2.83 0-1.657-1.343-3-3-3z">
-                    </path>
-                </svg>
-                <h3 class="text-2xl font-semibold mb-2">Real Time</h3>
-                <p class="text-gray-600">Pantau status dan laporan secara langsung dengan informasi Real-Time</p>
-            </div>
-            <!-- Feature 3 -->
-            <div
-                class="flex flex-col items-center text-center p-8 rounded-2xl shadow-md hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 bg-white border border-gray-100"
-                data-aos="zoom-in" data-aos-delay="300">
-                <svg class="w-16 h-16 text-blue-600 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M3 15a4 4 0 004 4h10a4 4 0 004-4M3 15V9a4 4 0 014-4h10a4 4 0 014 4v6"></path>
-                </svg>
-                <h3 class="text-2xl font-semibold mb-2">Transparan</h3>
-                <p class="text-gray-600">Meningkatkan akuntabilitas dengan pelaporan dan pemantauan yang transparan.</p>
-            </div>
+
+     <!-- Feature 1: Mudah Digunakan -->
+     <div class="flex flex-col items-center text-center p-8 rounded-2xl shadow-md bg-white border border-gray-100 transition-transform duration-500 hover:scale-105 hover:-translate-y-2"
+           data-aos="zoom-in" data-aos-delay="100">
+        <lottie-player src="https://lottie.host/09494c5b-ba05-4d98-9147-0284e6627b49/5laDpKXA0Y.json" background="transparent" speed="1"
+                       style="width: 80px; height: 80px;" loop autoplay></lottie-player>
+        <h3 class="text-2xl font-semibold mb-2">Mudah Digunakan</h3>
+        <p class="text-gray-600">Antarmuka yang intuitif memudahkan setiap pengguna untuk mengakses informasi dengan cepat.</p>
+      </div>
+
+      <!-- Feature 2: Real Time -->
+      <div class="flex flex-col items-center text-center p-8 rounded-2xl shadow-md bg-white border border-gray-100 transition-transform duration-500 hover:scale-105 hover:-translate-y-2"
+           data-aos="zoom-in" data-aos-delay="200">
+        <lottie-player src="https://lottie.host/7a6afc3f-160f-4aae-ba1e-8fc592b75e5f/GuSs75tKrt.json" background="transparent" speed="1"
+                       style="width: 80px; height: 80px;" loop autoplay></lottie-player>
+        <h3 class="text-2xl font-semibold mb-2">Real Time</h3>
+        <p class="text-gray-600">Pantau status dan laporan secara langsung dengan informasi Real-Time</p>
+      </div>
+
+      <!-- Feature 3: Transparan -->
+      <div class="flex flex-col items-center text-center p-8 rounded-2xl shadow-md bg-white border border-gray-100 transition-transform duration-500 hover:scale-105 hover:-translate-y-2"
+           data-aos="zoom-in" data-aos-delay="300">
+        <lottie-player src="https://assets10.lottiefiles.com/packages/lf20_9cyyl8i4.json" background="transparent" speed="1"
+                       style="width: 80px; height: 80px;" loop autoplay></lottie-player>
+        <h3 class="text-2xl font-semibold mb-2">Transparan</h3>
+        <p class="text-gray-600">Meningkatkan akuntabilitas dengan pelaporan dan pemantauan yang transparan.</p>
+      </div>
         </div>
     </div>
 </section>
@@ -251,7 +246,11 @@
         </div>
     </div>
 </section>
-@push('scripts')
+
+  <!-- Scroll-to-Top Button -->
+  <button id="scrollTopBtn" onclick="window.scrollTo({ top: 0, behavior: 'smooth' });">↑</button>
+  @stack('scripts')
+
   <script>
      const progressBar = document.getElementById('progressBarHorizontal');
 
@@ -267,19 +266,24 @@ function updateProgressBar() {
 window.addEventListener('scroll', updateProgressBar);
 window.addEventListener('load', updateProgressBar);
 
-  const swiper = new Swiper('.swiper', {
-    loop: true,
-    autoplay: {
-      delay: 2500,
-      disableOnInteraction: false,
-    },
-    speed: 1000,
-    effect: 'slide',
-  });
   </script>
-  @endpush
+<!-- Swiper JS -->
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+<script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
 
-  <!-- Scroll-to-Top Button -->
-  <button id="scrollTopBtn" onclick="window.scrollTo({ top: 0, behavior: 'smooth' });">↑</button>
-  @stack('scripts')
+<script>
+    const swiper = new Swiper(".mySwiper", {
+        loop: true,
+        autoplay: {
+            delay: 900,
+            disableOnInteraction: false,
+        },
+        pagination: {
+            el: ".swiper-pagination",
+            clickable: true,
+        },
+    });
+</script>
+
+
 @endsection
