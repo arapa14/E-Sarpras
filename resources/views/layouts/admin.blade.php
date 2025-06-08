@@ -270,15 +270,12 @@ html, body {
     min-height: 100dvh;
 }
 
-/* Impersonation Banner Enhancement */
 .impersonation-banner {
     background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(248, 250, 252, 0.95));
     backdrop-filter: blur(16px);
     border: 1px solid rgba(59, 130, 246, 0.2);
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
 }
-
-/* Navigation List Styles */
 .nav-list {
     padding: 0 0 20px 0;
 }
@@ -288,7 +285,6 @@ html, body {
 
 <body class="bg-gradient-to-br from-gray-50 to-gray-100 font-sans">
     @php
-        // Melakukan fetching data langsung di layout untuk menghitung jumlah pending.
         $complaintsPending = \App\Models\Complaint::where('status', 'pending')->count();
         $questionsPending = \App\Models\Question::where('status', 'pending')->count();
     @endphp
@@ -310,7 +306,6 @@ html, body {
         <div class="flex items-center justify-between">
             <button id="sidebarToggle" class="mobile-toggle-btn text-white focus:outline-none relative p-2 rounded-lg">
                 <i class="fas fa-bars fa-lg"></i>
-                {{-- Badge untuk total pengaduan dan pertanyaan pending --}}
                 @if ($complaintsPending + $questionsPending > 0)
                     <span class="badge absolute -top-1 -right-1 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white rounded-full min-w-[20px] h-5">
                         {{ $complaintsPending + $questionsPending }}
@@ -448,7 +443,6 @@ html, body {
 
     <!-- Script -->
     <script>
-        // Fungsi menampilkan spinner
         function showSpinner() {
             document.getElementById('loadingOverlay').style.display = 'block';
         }
@@ -456,8 +450,6 @@ html, body {
         function hideSpinner() {
             document.getElementById('loadingOverlay').style.display = 'none';
         }
-
-        // Tampilkan spinner saat berpindah halaman
         document.addEventListener("DOMContentLoaded", function() {
             const links = document.querySelectorAll("a");
             links.forEach(link => {
@@ -467,14 +459,10 @@ html, body {
                     }
                 });
             });
-
-            // Sembunyikan spinner setelah halaman dimuat
             window.addEventListener("load", function() {
                 document.getElementById("loadingOverlay").style.display = "none";
             });
         });
-
-        // Fungsi update waktu real-time
         function updateClock() {
             const now = new Date();
             const days = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
@@ -492,26 +480,21 @@ html, body {
         }
         updateClock();
         setInterval(updateClock, 30000);
-
-        // Sidebar Toggle Functionality
         document.addEventListener('DOMContentLoaded', function() {
             const sidebarToggle = document.getElementById('sidebarToggle');
             const sidebar = document.getElementById('sidebar');
             const sidebarOverlay = document.getElementById('sidebarOverlay');
 
-            // Toggle sidebar untuk mobile
             sidebarToggle.addEventListener('click', function() {
                 sidebar.classList.toggle('open');
                 sidebarOverlay.classList.toggle('active');
             });
 
-            // Close sidebar ketika overlay diklik
             sidebarOverlay.addEventListener('click', function() {
                 sidebar.classList.remove('open');
                 sidebarOverlay.classList.remove('active');
             });
 
-            // Close sidebar ketika link diklik (mobile)
             const navLinks = sidebar.querySelectorAll('a');
             navLinks.forEach(link => {
                 link.addEventListener('click', function() {
@@ -522,7 +505,6 @@ html, body {
                 });
             });
 
-            // Handle window resize
             window.addEventListener('resize', function() {
                 if (window.innerWidth >= 640) {
                     sidebar.classList.remove('open');
