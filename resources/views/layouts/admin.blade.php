@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="id">
-
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -14,8 +13,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
     <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
     <style>
-/* Replace the existing sidebar styles in admin.blade.php with these: */
-
 .sidebar {
     background: linear-gradient(145deg, #0f172a, #1e293b, #334155);
     backdrop-filter: blur(16px);
@@ -139,7 +136,6 @@
     margin: 16px 0;
 }
 
-/* Mobile Header Enhancement */
 .mobile-header {
     background: linear-gradient(135deg, #1e40af, #3b82f6);
     backdrop-filter: blur(16px);
@@ -160,7 +156,6 @@
     transform: scale(0.95);
 }
 
-/* Loading Overlay */
 #loadingOverlay {
     display: none;
     position: fixed;
@@ -176,15 +171,11 @@
     left: 50%;
     transform: translate(-50%, -50%);
 }
-
-/* FIXED: Responsive Layout */
 .app-container {
     display: flex;
     min-height: 100vh;
-    min-height: 100dvh; /* Dynamic viewport height for mobile */
+    min-height: 100dvh; 
 }
-
-/* FIXED: Mobile Styles */
 @media (max-width: 639px) {
     .mobile-header {
         position: fixed;
@@ -201,7 +192,7 @@
         left: 0;
         width: 280px;
         height: 100vh;
-        height: 100dvh; /* Dynamic viewport height */
+        height: 100dvh; 
         z-index: 40;
         transform: translateX(-100%);
         transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -232,15 +223,13 @@
 
     .main-content {
         flex: 1;
-        padding-top: 80px; /* Account for mobile header */
+        padding-top: 80px;
         padding-left: 0;
         padding-right: 0;
         min-height: calc(100vh - 80px);
-        min-height: calc(100dvh - 80px); /* Dynamic viewport height */
+        min-height: calc(100dvh - 80px); 
     }
 }
-
-/* FIXED: Tablet and Desktop Styles */
 @media (min-width: 640px) {
     .mobile-header {
         display: none;
@@ -251,13 +240,13 @@
         top: 0;
         width: 280px;
         height: 100vh;
-        height: 100dvh; /* Dynamic viewport height */
+        height: 100dvh; 
         flex-shrink: 0;
         transform: translateX(0);
         overflow-y: auto;
         padding-top: 20px;
         padding-bottom: 20px;
-        /* Make sidebar scroll independently */
+
         align-self: flex-start;
     }
 
@@ -270,11 +259,11 @@
         min-width: 0;
         padding: 0;
         min-height: 100vh;
-        min-height: 100dvh; /* Dynamic viewport height */
+        min-height: 100dvh; 
     }
 }
 
-/* ADDITIONAL: Ensure proper body and html height */
+
 html, body {
     height: 100%;
     min-height: 100vh;
