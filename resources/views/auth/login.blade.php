@@ -15,8 +15,7 @@
         }
         
         .main-container {
-            height: 100vh;
-            overflow: hidden;
+            min-height: 100vh;
         }
         
         .tab-active {
@@ -82,35 +81,28 @@
             inset: 0;
             z-index: 999;
             background-color: rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(4px);
         }
         
-        .spinner {
+        #loadingOverlay .spinner {
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
         }
         
+        /* Mobile First Responsive Design */
         .left-panel {
-            height: 100vh;
-            overflow: hidden;
+            min-height: 40vh;
         }
         
         .right-panel {
-            height: 100vh;
-            overflow-y: auto;
+            min-height: 60vh;
         }
         
         .form-wrapper {
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
             padding: 1rem;
         }
         
-        /* Compact form styles */
         .compact-header {
             margin-bottom: 1.5rem;
         }
@@ -123,20 +115,119 @@
             padding: 0.75rem 1rem;
         }
         
-        @media (max-width: 768px) {
+        /* Mobile Branding Section */
+        .mobile-branding {
+            padding: 2rem 1rem;
+            text-align: center;
+        }
+        
+        .mobile-branding h1 {
+            font-size: 1.875rem;
+            font-weight: bold;
+            color: white;
+            margin-bottom: 0.5rem;
+        }
+        
+        .mobile-branding p {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 0.875rem;
+        }
+        
+        .mobile-features {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 1rem;
+            flex-wrap: wrap;
+        }
+        
+        .mobile-feature {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 0.75rem;
+            padding: 0.75rem;
+            color: white;
+            font-size: 0.75rem;
+            min-width: 80px;
+            text-align: center;
+        }
+        
+        /* Tablet Styles */
+        @media (min-width: 768px) {
             .main-container {
-                height: auto;
+                flex-direction: row;
+            }
+            
+            .left-panel {
                 min-height: 100vh;
+                width: 40%;
             }
             
             .right-panel {
-                height: auto;
-                overflow-y: visible;
+                width: 60%;
+                min-height: 100vh;
             }
             
             .form-wrapper {
+                display: flex;
+                align-items: center;
+                justify-content: center;
                 min-height: 100vh;
-                padding: 1rem;
+                padding: 2rem;
+            }
+            
+            .mobile-branding {
+                display: none;
+            }
+            
+            .desktop-branding {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                width: 100%;
+                padding: 2rem;
+                text-align: center;
+                color: white;
+                position: relative;
+                z-index: 10;
+            }
+        }
+        
+        /* Desktop Styles */
+        @media (min-width: 1024px) {
+            .left-panel {
+                width: 50%;
+            }
+            
+            .right-panel {
+                width: 50%;
+            }
+            
+            .desktop-branding h1 {
+                font-size: 3rem;
+                margin-bottom: 1rem;
+            }
+            
+            .desktop-branding p {
+                font-size: 1rem;
+                opacity: 0.9;
+            }
+        }
+        
+        /* Mobile specific adjustments */
+        @media (max-width: 767px) {
+            .main-container {
+                flex-direction: column;
+            }
+            
+            .left-panel {
+                order: 1;
+            }
+            
+            .right-panel {
+                order: 2;
             }
             
             .compact-header {
@@ -146,13 +237,50 @@
             .compact-form {
                 gap: 0.75rem;
             }
+            
+            .compact-input {
+                padding: 0.875rem 1rem;
+            }
+            
+            .floating-element {
+                display: none;
+            }
+            
+            .desktop-branding {
+                display: none;
+            }
+        }
+        
+        /* Very small screens */
+        @media (max-width: 375px) {
+            .mobile-branding {
+                padding: 1.5rem 1rem;
+            }
+            
+            .mobile-branding h1 {
+                font-size: 1.5rem;
+            }
+            
+            .form-wrapper {
+                padding: 0.75rem;
+            }
+            
+            .mobile-features {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .mobile-feature {
+                width: 100%;
+                max-width: 200px;
+            }
         }
     </style>
 </head>
 
 <body class="bg-gray-50 font-sans">
-      <!-- Back Button Floating -->
-      <div class="fixed top-4 left-4 z-50">
+    <!-- Back Button Floating -->
+    <div class="fixed top-4 left-4 z-50">
         <a href="/"
             class="flex items-center space-x-2 bg-white shadow-md px-3 py-2 rounded-full hover:bg-gray-100 transition">
             <!-- Icon panah kiri -->
@@ -163,25 +291,53 @@
             <span class="text-blue-600 font-medium">Kembali</span>
         </a>
     </div>
-    <!-- Loading Overlay -->
+
+    <!-- Overlay Spinner -->
     <div id="loadingOverlay">
         <div class="spinner">
-            <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-white"></div>
+            <svg class="animate-spin h-12 w-12 text-white" xmlns="http://www.w3.org/2000/svg" fill="none"
+                viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4">
+                </circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+            </svg>
         </div>
     </div>
 
-    <div class="main-container flex">
-        <div class="hidden lg:flex lg:w-1/2 gradient-bg relative overflow-hidden left-panel">
-            <!-- Decorative floating elements -->
-            <div class="absolute top-16 left-16 w-12 h-12 bg-white rounded-full floating-element opacity-60"></div>
-            <div class="absolute top-32 right-24 w-8 h-8 bg-white rounded-full floating-element opacity-50"></div>
-            <div class="absolute bottom-24 left-12 w-16 h-16 bg-white rounded-full floating-element opacity-40"></div>
-            <div class="absolute bottom-16 right-16 w-6 h-6 bg-white rounded-full floating-element opacity-70"></div>
-            
-            <div class="flex flex-col justify-center items-center w-full p-6 text-white relative z-10">
+    <div class="main-container flex flex-col md:flex-row">
+        <!-- Left panel / Branding Panel -->
+        <div class="gradient-bg relative overflow-hidden left-panel">
+            <!-- Mobile Branding (visible on mobile) -->
+            <div class="mobile-branding md:hidden">
+                <h1>E-Sarpras</h1>
+                <p>Mudah digunakan, Informasi Real-time, dan Transparan.</p>
+                <div class="mobile-features">
+                    <div class="mobile-feature">
+                        <div class="text-lg mb-1">✅</div>
+                        <div>Mudah</div>
+                    </div>
+                    <div class="mobile-feature">
+                        <div class="text-lg mb-1">⏰</div>
+                        <div>Real-time</div>
+                    </div>
+                    <div class="mobile-feature">
+                        <div class="text-lg mb-1">📜</div>
+                        <div>Transparan</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Desktop Branding (visible on tablet and desktop) -->
+            <div class="desktop-branding hidden md:flex">
+                <!-- Decorative floating elements -->
+                <div class="absolute top-16 left-16 w-12 h-12 bg-white rounded-full floating-element opacity-60"></div>
+                <div class="absolute top-32 right-24 w-8 h-8 bg-white rounded-full floating-element opacity-50"></div>
+                <div class="absolute bottom-24 left-12 w-16 h-16 bg-white rounded-full floating-element opacity-40"></div>
+                <div class="absolute bottom-16 right-16 w-6 h-6 bg-white rounded-full floating-element opacity-70"></div>
+                
                 <!-- Main Illustration Cards -->
                 <div class="mb-6 relative">
-                    <!-- Yapping Card -->
+                    <!-- E-Sarpras Card -->
                     <div class="illustration-card rounded-xl p-4 mb-3 w-56 transform rotate-2">
                         <div class="flex items-center mb-3">
                             <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center">
@@ -231,7 +387,7 @@
                 <!-- teks bawah branding panel -->
                 <div class="text-center">
                     <h1 class="text-3xl font-bold mb-3">E-Sarpras</h1>
-                    <p class="text-base opacity-90 whitespace-nowrap">
+                    <p class="text-base opacity-90">
                     Mudah digunakan, Informasi Real-time, dan Transparan.
                     </p>
                     <div class="flex justify-center mt-4 space-x-2">
@@ -244,9 +400,9 @@
         </div>
 
         <!-- Right panel -->
-        <div class="w-full lg:w-1/2 right-panel">
+        <div class="right-panel bg-white">
             <div class="form-wrapper">
-                <div class="w-full max-w-md">
+                <div class="w-full max-w-md mx-auto">
                     <!-- Header -->
                     <div class="text-center compact-header">
                         <div class="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center mx-auto mb-4">
@@ -382,7 +538,7 @@
                                 <input type="password" 
                                     name="password" 
                                     id="register_password" 
-                                    placeholder="masukan kata safndi"
+                                    placeholder="masukan kata sandi"
                                     class="input-field compact-input w-full pr-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                                     required>
                                 <button type="button" 
@@ -424,7 +580,6 @@
                         </button>
                     </form>
 
-
                     <div class="text-center mt-4">
                         <p id="switchText" class="text-gray-600 text-sm">
                             Don't have an account yet? 
@@ -440,6 +595,28 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
     <script>
+        function showSpinner() {
+    document.getElementById('loadingOverlay').style.display = 'block';
+}
+        document.getElementById("registerForm").addEventListener("submit", function(event) {
+    event.preventDefault();
+    if (validateRegisterForm()) {
+        showSpinner(); 
+        this.submit();
+    }
+});
+
+document.getElementById("loginForm").addEventListener("submit", function(event) {
+    event.preventDefault();
+    let email = document.getElementById("login_email").value.trim();
+    let password = document.getElementById("login_password").value.trim();
+    if (email === "" || password === "") {
+        toastr.error("Email dan password harus diisi");
+        return;
+    }
+    showSpinner();
+    this.submit();
+});
         const loginTab = document.getElementById('loginTab');
         const registerTab = document.getElementById('registerTab');
         const loginForm = document.getElementById('loginForm');
